@@ -200,7 +200,7 @@ export default function DashboardApp() {
             <AppTasks
               title="Tasks"
               list={[
-                { id: '1', label: 'Create FireStone Logo' },
+                { id: '1', label: 'Hello everyone !!!' },
                 { id: '2', label: 'Add SCSS and JS files if required' },
                 { id: '3', label: 'Stakeholder Meeting' },
                 { id: '4', label: 'Scoping & Estimations' },

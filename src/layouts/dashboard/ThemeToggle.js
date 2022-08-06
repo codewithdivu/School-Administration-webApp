@@ -2,9 +2,9 @@ import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch, { SwitchProps } from '@mui/material/Switch';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
+import Switch from '@mui/material/Switch';
+// import Stack from '@mui/material/Stack';
+// import Typography from '@mui/material/Typography';
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
@@ -57,9 +57,11 @@ export default function ThemeToggle() {
   return (
     <FormGroup>
       <FormControlLabel
-        control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked />}
-        // label="MUI switch"
+        control={<MaterialUISwitch   />}
       />
     </FormGroup>
   );
 }
+
+// sx={{ m: 1 }}
+// defaultChecked

@@ -16,6 +16,7 @@ ThemeProvider.propTypes = {
 };
 
 export default function ThemeProvider({ children }) {
+  console.log('palette', palette);
   const themeOptions = useMemo(
     () => ({
       palette,
@@ -27,7 +28,10 @@ export default function ThemeProvider({ children }) {
     []
   );
 
+
+
   const theme = createTheme(themeOptions);
+  // theme.pallete.mode = 'dark';
   theme.components = componentsOverride(theme);
 
   return (

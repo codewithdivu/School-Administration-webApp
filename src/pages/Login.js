@@ -1,3 +1,5 @@
+import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
@@ -10,6 +12,8 @@ import Logo from '../components/Logo';
 // sections
 import { LoginForm } from '../sections/auth/login';
 import AuthSocial from '../sections/auth/AuthSocial';
+
+import { auth, provider } from '../firebase/config';
 
 // ----------------------------------------------------------------------
 
@@ -54,6 +58,45 @@ const ContentStyle = styled('div')(({ theme }) => ({
   padding: theme.spacing(12, 0),
 }));
 
+
+// ---------------------SIGN IN WITH GOOGLE -----------------------------------------
+
+const handleGoogleSignIn = async () => {
+  await signInWithPopup(auth, provider)
+    .then((result) => {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      // The signed-in user info.
+      const user = result.user;
+      console.log('google account', user);
+      // ...
+    })
+    .catch((error) => {
+      // Handle Errors here.
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // The email of the user's account used.
+      const email = error.customData.email;
+      // The AuthCredential type that was used.
+      const credential = GoogleAuthProvider.credentialFromError(error);
+      // ...
+    });
+};
+
+const handleSignIn = (e, value) => {
+  // console.log('value', value)
+  e.preventDefault();
+  switch (value) {
+    case 'google':
+      handleGoogleSignIn();
+      break;
+
+    default:
+      break;
+  }
+};
+
 // ----------------------------------------------------------------------
 
 export default function Login() {
@@ -89,12 +132,12 @@ export default function Login() {
         <Container maxWidth="sm">
           <ContentStyle>
             <Typography variant="h4" gutterBottom>
-              Sign in 
+              Sign in
             </Typography>
 
             <Typography sx={{ color: 'text.secondary', mb: 5 }}>Log in using below.</Typography>
 
-            <AuthSocial />
+            <AuthSocial signIn={handleSignIn} />
 
             <LoginForm />
 

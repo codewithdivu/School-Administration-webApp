@@ -1,0 +1,24 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAuth,GoogleAuthProvider } from "firebase/auth";
+
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCt6YNeGxzBzJFo42aGWsUv1t6TOQVklIo",
+  authDomain: "school-administration-c558d.firebaseapp.com",
+  projectId: "school-administration-c558d",
+  storageBucket: "school-administration-c558d.appspot.com",
+  messagingSenderId: "320945517532",
+  appId: "1:320945517532:web:c115a08b4fae197a0e9519"
+};
+
+// Initialize Firebase
+
+export const provider = new GoogleAuthProvider();
+
+const app = initializeApp(firebaseConfig);
+
+export const auth = getAuth(app);
