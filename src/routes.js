@@ -11,6 +11,8 @@ import Products from './pages/Products';
 import DashboardApp from './pages/DashboardApp';
 import useAuthenticateUser from './hooks/useAuthenticateUser';
 import Loader from './components/Loader';
+import AccountGeneral from './pages/account';
+import Profile from './pages/profile';
 
 // ----------------------------------------------------------------------
 
@@ -34,6 +36,8 @@ export default function Router() {
         { path: 'user', element: <User /> },
         { path: 'products', element: <Products /> },
         { path: 'blog', element: <Blog /> },
+        { path: 'account', element: <AccountGeneral />},
+        { path: 'profile', element: <Profile />}
       ],
     },
     {

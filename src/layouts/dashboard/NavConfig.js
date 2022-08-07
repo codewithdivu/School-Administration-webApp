@@ -11,11 +11,11 @@ const navConfig = [
     path: '/dashboard/app',
     icon: getIcon('eva:pie-chart-2-fill'),
   },
-  // {
-  //   title: 'login',
-  //   path: '/login',
-  //   icon: getIcon('eva:lock-fill'),
-  // },
+  {
+    title: 'profile',
+    path: '/dashboard/profile',
+    icon: getIcon('eva:person-fill'),
+  },
   {
     title: 'user',
     path: '/dashboard/user',
