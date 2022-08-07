@@ -1,6 +1,6 @@
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Card, Link, Container, Typography } from '@mui/material';
@@ -61,45 +61,56 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 // ---------------------SIGN IN WITH GOOGLE -----------------------------------------
 
-const handleGoogleSignIn = async () => {
-  await signInWithPopup(auth, provider)
-    .then((result) => {
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
-      // The signed-in user info.
-      const user = result.user;
-      console.log('google account', user);
-      // ...
-    })
-    .catch((error) => {
-      // Handle Errors here.
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      // The email of the user's account used.
-      const email = error.customData.email;
-      // The AuthCredential type that was used.
-      const credential = GoogleAuthProvider.credentialFromError(error);
-      // ...
-    });
-};
 
-const handleSignIn = (e, value) => {
-  // console.log('value', value)
-  e.preventDefault();
-  switch (value) {
-    case 'google':
-      handleGoogleSignIn();
-      break;
 
-    default:
-      break;
-  }
-};
 
 // ----------------------------------------------------------------------
 
 export default function Login() {
+  
+  const navigate = useNavigate();
+  
+  const handleGoogleSignIn = async () => {
+    await signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        console.log('user', user);
+        
+        navigate('/dashboard/app');
+
+        // console.log('google account', user);
+        // ...
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
+  };
+  
+  const handleSignIn = (e, value) => {
+    // console.log('value', value)
+    e.preventDefault();
+    switch (value) {
+      case 'google':
+        handleGoogleSignIn();
+        break;
+  
+      default:
+        break;
+    }
+  };
+  
+
   const smUp = useResponsive('up', 'sm');
 
   const mdUp = useResponsive('up', 'md');

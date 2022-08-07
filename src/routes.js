@@ -10,14 +10,26 @@ import NotFound from './pages/Page404';
 import Register from './pages/Register';
 import Products from './pages/Products';
 import DashboardApp from './pages/DashboardApp';
+import useAuthenticateUser from './hooks/useAuthenticateUser';
+import Loader from './components/Loader';
 
 // ----------------------------------------------------------------------
 
 export default function Router() {
+  const { user, isLoader } = useAuthenticateUser();
+
+  console.log('user', user);
+  console.log('isLoader', isLoader);
+
+  if (isLoader) {
+    return <Loader isLoading={isLoader} />;
+  }
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   return useRoutes([
     {
       path: '/dashboard',
-      element: <DashboardLayout />,
+      element: user ? <DashboardLayout /> : <Navigate to="/login" />,
       children: [
         { path: 'app', element: <DashboardApp /> },
         { path: 'user', element: <User /> },
@@ -27,7 +39,7 @@ export default function Router() {
     },
     {
       path: '/',
-      element: <LogoOnlyLayout />,
+      element: !user ? <LogoOnlyLayout /> : <Navigate to="/dashboard/app" />,
       children: [
         { path: '/', element: <Navigate to="/dashboard/app" /> },
         { path: 'login', element: <Login /> },

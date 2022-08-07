@@ -14,6 +14,7 @@ import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
 //
 import navConfig from './NavConfig';
+import useAuthenticateUser from '../../hooks/useAuthenticateUser';
 
 // ----------------------------------------------------------------------
 
@@ -44,6 +45,10 @@ DashboardSidebar.propTypes = {
 export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const { pathname } = useLocation();
 
+  const {
+    user: { photoURL, displayName },
+  } = useAuthenticateUser();
+
   const isDesktop = useResponsive('up', 'lg');
 
   useEffect(() => {
@@ -67,10 +72,10 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       <Box sx={{ mb: 5, mx: 2.5 }}>
         <Link underline="none" component={RouterLink} to="#">
           <AccountStyle>
-            <Avatar src={account.photoURL} alt="photoURL" />
+            <Avatar src={photoURL} alt={displayName} />
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                {account.displayName}
+                {displayName}
               </Typography>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                 {account.role}
@@ -85,14 +90,14 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       <Box sx={{ flexGrow: 1 }} />
 
       {/* <Box sx={{ px: 2.5, pb: 3, mt: 10 }}> */}
-        {/* <Stack alignItems="center" spacing={3} sx={{ pt: 5, borderRadius: 2, position: 'relative' }}> */}
-          {/* <Box
+      {/* <Stack alignItems="center" spacing={3} sx={{ pt: 5, borderRadius: 2, position: 'relative' }}> */}
+      {/* <Box
             component="img"
             src="/static/illustrations/illustration_avatar.png"
             sx={{ width: 100, position: 'absolute', top: -50 }}
           /> */}
 
-          {/* <Box sx={{ textAlign: 'center' }}>
+      {/* <Box sx={{ textAlign: 'center' }}>
             <Typography gutterBottom variant="h6">
               Get more?
             </Typography>
@@ -101,10 +106,10 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
             </Typography>
           </Box> */}
 
-          {/* <Button href="https://material-ui.com/store/items/minimal-dashboard/" target="_blank" variant="contained">
+      {/* <Button href="https://material-ui.com/store/items/minimal-dashboard/" target="_blank" variant="contained">
             Upgrade to Pro
           </Button> */}
-        {/* </Stack> */}
+      {/* </Stack> */}
       {/* </Box> */}
     </Scrollbar>
   );

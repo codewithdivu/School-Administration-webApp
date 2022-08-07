@@ -4,9 +4,12 @@ import { Link as RouterLink } from 'react-router-dom';
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton } from '@mui/material';
 // components
+import { getAuth, signOut } from 'firebase/auth';
 import MenuPopover from '../../components/MenuPopover';
 // mocks_
 import account from '../../_mock/account';
+import { auth } from '../../firebase/config';
+import useAuthenticateUser from '../../hooks/useAuthenticateUser';
 
 // ----------------------------------------------------------------------
 
@@ -35,6 +38,10 @@ export default function AccountPopover() {
 
   const [open, setOpen] = useState(null);
 
+  const {
+    user: { photoURL, displayName,email },
+  } = useAuthenticateUser();
+
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
@@ -42,6 +49,22 @@ export default function AccountPopover() {
   const handleClose = () => {
     setOpen(null);
   };
+
+  // SIGN OUT .........
+
+  const handleSignOut = async() => {
+
+    await signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+        console.log("successfully logout");
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  };
+
+  
 
   return (
     <>
@@ -63,7 +86,7 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar src={account.photoURL} alt="photoURL" />
+        <Avatar src={photoURL} alt={displayName} />
       </IconButton>
 
       <MenuPopover
@@ -82,10 +105,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {account.displayName}
+            {displayName}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
+            {email}
           </Typography>
         </Box>
 
@@ -101,7 +124,7 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={handleClose} sx={{ m: 1 }}>
+        <MenuItem onClick={handleSignOut} sx={{ m: 1 }}>
           Logout
         </MenuItem>
       </MenuPopover>
