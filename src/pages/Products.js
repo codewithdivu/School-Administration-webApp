@@ -24,7 +24,7 @@ export default function EcommerceShop() {
     <Page title="Dashboard: Products">
       <Container>
         <Typography variant="h2" sx={{ mb: 5 }}>
-          Products
+          Library
         </Typography>
 
         <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>

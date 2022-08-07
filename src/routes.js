@@ -34,7 +34,7 @@ export default function Router() {
       children: [
         { path: 'app', element: <DashboardApp /> },
         { path: 'user', element: <User /> },
-        { path: 'products', element: <Products /> },
+        { path: 'library', element: <Products /> },
         { path: 'blog', element: <Blog /> },
         { path: 'account', element: <AccountGeneral />},
         { path: 'profile', element: <Profile />}

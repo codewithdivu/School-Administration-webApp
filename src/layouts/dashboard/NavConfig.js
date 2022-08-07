@@ -23,7 +23,7 @@ const navConfig = [
   },
   {
     title: 'Library',
-    path: '/dashboard/products',
+    path: '/dashboard/library',
     icon: getIcon('eva:book-fill'),
   },
   {

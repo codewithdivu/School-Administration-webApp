@@ -165,7 +165,7 @@ const Account = () => {
                   }}
                 >
                   Allowed *.jpeg, *.jpg, *.png, *.gif
-                  {/* <br /> max size of {fData(3145728)} */}
+                  <br /> max size of 3MB
                 </Typography>
               }
             />

@@ -19,9 +19,9 @@ const MENU_OPTIONS = [
     linkTo: '/',
   },
   {
-    label: 'Profile',
+    label: 'Account',
     icon: 'eva:person-fill',
-    linkTo: '#',
+    linkTo: '/dashboard/account',
   },
   {
     label: 'Settings',
@@ -107,7 +107,7 @@ export default function AccountPopover() {
 
         <Stack sx={{ p: 1 }}>
           {MENU_OPTIONS.map((option) => (
-            <MenuItem key={option.label} to={option.linkTo} component={RouterLink}>
+            <MenuItem key={option.label} to={option.linkTo} onClick={handleClose} component={RouterLink}>
               {option.label}
             </MenuItem>
           ))}
