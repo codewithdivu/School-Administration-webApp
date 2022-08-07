@@ -1,4 +1,4 @@
-import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { signInWithPopup } from 'firebase/auth';
 
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
@@ -58,45 +58,39 @@ const ContentStyle = styled('div')(({ theme }) => ({
   padding: theme.spacing(12, 0),
 }));
 
-
 // ---------------------SIGN IN WITH GOOGLE -----------------------------------------
-
-
-
 
 // ----------------------------------------------------------------------
 
 export default function Login() {
-  
   const navigate = useNavigate();
-  
+
   const handleGoogleSignIn = async () => {
     await signInWithPopup(auth, provider)
       .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
+        // const credential = GoogleAuthProvider.credentialFromResult(result);
         // The signed-in user info.
-        const user = result.user;
+        const { user } = result;
         console.log('user', user);
-        
+
         navigate('/dashboard/app');
 
         // console.log('google account', user);
         // ...
       })
-      .catch((error) => {
+      .catch(() => {
         // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
+        // const errorCode = error.code;
+        // const errorMessage = error.message;
         // The email of the user's account used.
-        const email = error.customData.email;
+        // const email = error.customData.email;
         // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
+        // const credential = GoogleAuthProvider.credentialFromError(error);
         // ...
       });
   };
-  
+
   const handleSignIn = (e, value) => {
     // console.log('value', value)
     e.preventDefault();
@@ -104,12 +98,11 @@ export default function Login() {
       case 'google':
         handleGoogleSignIn();
         break;
-  
+
       default:
         break;
     }
   };
-  
 
   const smUp = useResponsive('up', 'sm');
 

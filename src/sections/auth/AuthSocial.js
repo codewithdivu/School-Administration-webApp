@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 // material
 import { Stack, Button, Divider, Typography } from '@mui/material';
 // component
@@ -11,7 +12,14 @@ export default function AuthSocial({ signIn }) {
     <>
       <Stack direction="row" spacing={2}>
         {socialSignInButtonsItems.map((item) => (
-          <Button key={item.id} fullWidth size="large" color="inherit" variant="outlined" onClick={(e)=>signIn(e,item.value)}>
+          <Button
+            key={item.id}
+            fullWidth
+            size="large"
+            color="inherit"
+            variant="outlined"
+            onClick={(e) => signIn(e, item.value)}
+          >
             <Iconify icon={`eva:${item.value}-fill`} color={item.color} width={22} height={22} />
           </Button>
         ))}
@@ -25,3 +33,7 @@ export default function AuthSocial({ signIn }) {
     </>
   );
 }
+
+AuthSocial.propTypes = {
+  signIn: PropTypes.func,
+};

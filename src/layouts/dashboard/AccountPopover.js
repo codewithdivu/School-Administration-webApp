@@ -4,10 +4,9 @@ import { Link as RouterLink } from 'react-router-dom';
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton } from '@mui/material';
 // components
-import { getAuth, signOut } from 'firebase/auth';
+import { signOut } from 'firebase/auth';
 import MenuPopover from '../../components/MenuPopover';
 // mocks_
-import account from '../../_mock/account';
 import { auth } from '../../firebase/config';
 import useAuthenticateUser from '../../hooks/useAuthenticateUser';
 
@@ -39,7 +38,7 @@ export default function AccountPopover() {
   const [open, setOpen] = useState(null);
 
   const {
-    user: { photoURL, displayName,email },
+    user: { photoURL, displayName, email },
   } = useAuthenticateUser();
 
   const handleOpen = (event) => {
@@ -52,19 +51,11 @@ export default function AccountPopover() {
 
   // SIGN OUT .........
 
-  const handleSignOut = async() => {
-
+  const handleSignOut = async () => {
     await signOut(auth)
-      .then(() => {
-        // Sign-out successful.
-        console.log("successfully logout");
-      })
-      .catch((error) => {
-        // An error happened.
-      });
+      .then(() => {})
+      .catch(() => {});
   };
-
-  
 
   return (
     <>
