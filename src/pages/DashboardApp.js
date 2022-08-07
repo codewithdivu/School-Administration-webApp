@@ -17,17 +17,20 @@ import {
   AppCurrentSubject,
   AppConversionRates,
 } from '../sections/@dashboard/app';
+import useAuthenticateUser from '../hooks/useAuthenticateUser';
 
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
   const theme = useTheme();
 
+  const {user} = useAuthenticateUser();
+
   return (
     <Page title="Dashboard">
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Hi, Welcome back
+          {`Hi ${user.displayName}, Welcome back!`}
         </Typography>
 
         <Grid container spacing={3}>
