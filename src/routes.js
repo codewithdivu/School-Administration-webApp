@@ -19,8 +19,8 @@ import Profile from './pages/profile';
 export default function Router() {
   const { user, isLoader } = useAuthenticateUser();
 
-  console.log('user', user);
-  console.log('isLoader', isLoader);
+  // console.log('user', user);
+  // console.log('isLoader', isLoader);
 
   if (isLoader) {
     return <Loader isLoading={isLoader} />;

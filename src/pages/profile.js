@@ -7,7 +7,7 @@ import { Tab, Box, Card, Tabs, Container } from '@mui/material';
 import useAuthenticateUser from '../hooks/useAuthenticateUser';
 import useTabs from '../hooks/useTabs';
 // _mock_
-// import { _userAbout, _userFeeds, _userFriends, _userGallery, _userFollowers } from '../../_mock';
+// import { _userAbout, _userFeeds } from '../_mock/_user';
 // components
 import HeaderBreadcrumbs from '../components/HeaderBreadcrumbs';
 // sections

@@ -16,7 +16,7 @@ ThemeProvider.propTypes = {
 };
 
 export default function ThemeProvider({ children }) {
-  console.log('palette', palette);
+  // console.log('palette', palette);
   const themeOptions = useMemo(
     () => ({
       palette,

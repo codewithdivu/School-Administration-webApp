@@ -14,6 +14,7 @@ import { LoginForm } from '../sections/auth/login';
 import AuthSocial from '../sections/auth/AuthSocial';
 
 import { auth, provider } from '../firebase/config';
+import { addUser, getUserData } from '../firebase/services';
 
 // ----------------------------------------------------------------------
 
@@ -67,14 +68,23 @@ export default function Login() {
 
   const handleGoogleSignIn = async () => {
     await signInWithPopup(auth, provider)
-      .then((result) => {
+      .then(async (result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
         // const credential = GoogleAuthProvider.credentialFromResult(result);
         // The signed-in user info.
         const { user } = result;
-        console.log('user', user);
+        // console.log('result', result);
+        // console.log('user',user);
+        if (user.email) {
+          const response = await getUserData(user.email);
+          // console.log('response', response);
+          if (!response) {
+            await addUser({ ...user?.providerData[0] });
+          }
+          navigate('/dashboard/app');
+        }
 
-        navigate('/dashboard/app');
+        // console.log('user', user);
 
         // console.log('google account', user);
         // ...

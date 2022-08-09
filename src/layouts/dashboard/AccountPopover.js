@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { alpha } from '@mui/material/styles';
@@ -8,7 +8,8 @@ import { signOut } from 'firebase/auth';
 import MenuPopover from '../../components/MenuPopover';
 // mocks_
 import { auth } from '../../firebase/config';
-import useAuthenticateUser from '../../hooks/useAuthenticateUser';
+// import useAuthenticateUser from '../../hooks/useAuthenticateUser';
+import { UserProfileContext } from '../../contexts/userContext';
 
 // ----------------------------------------------------------------------
 
@@ -37,9 +38,11 @@ export default function AccountPopover() {
 
   const [open, setOpen] = useState(null);
 
-  const {
-    user: { photoURL, displayName, email },
-  } = useAuthenticateUser();
+  // const {
+  //   user: { userProfile.photoURL, userProfile.displayName, userProfile.email },
+  // } = useAuthenticateUser();
+
+  const { userProfile } = useContext(UserProfileContext);
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
@@ -77,7 +80,7 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar src={photoURL} alt={displayName} />
+        <Avatar src={userProfile?.photoURL} alt={userProfile?.displayName} />
       </IconButton>
 
       <MenuPopover
@@ -96,10 +99,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {displayName}
+            {userProfile?.displayName}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {email}
+            {userProfile?.email}
           </Typography>
         </Box>
 
