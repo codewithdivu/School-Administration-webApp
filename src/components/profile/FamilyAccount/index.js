@@ -1,21 +1,21 @@
 import * as Yup from 'yup';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
-import { Box, Grid, Card, Stack, Typography } from '@mui/material';
+import { Box, Grid, Card, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // hooks
 // import useAuth from '../../../../hooks/useAuth';
 // utils
 // import { fData } from '../../../../utils/formatNumber';
 // _mock
-import { countries } from '../../../_mock/_countries';
+// import { countries } from '../../../_mock/_countries';
 // components
-import { FormProvider, RHFSelect, RHFTextField, RHFUploadAvatar } from '../../hook-form';
+import { FormProvider, RHFTextField } from '../../hook-form';
 import useAuthenticateUser from '../../../hooks/useAuthenticateUser';
-import { updateAuth, updateUser } from '../../../firebase/services';
+import { updateUser } from '../../../firebase/services';
 import useUserProfile from '../../../hooks/useUserProfile';
 import Loader from '../../Loader';
 import { regex } from '../../../constants/keywords';
@@ -83,15 +83,13 @@ const EducationalAccount = () => {
     // }
 
     try {
-      const isDataUpdated = await updateUser({ ...formData, id: userProfileData.id });
+      await updateUser({ ...formData, id: userProfileData.id });
       setIsUserAdding(false);
     } catch (error) {
       console.error(error);
       setIsUserAdding(false);
     }
   };
-
-  const standard = Array.from({ length: 12 }, (_, i) => i + 1);
 
   if (isProfileLoading) {
     return <Loader isLoading={isProfileLoading} />;

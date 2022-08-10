@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
 import { Link, Stack, Checkbox, TextField, IconButton, InputAdornment, FormControlLabel } from '@mui/material';
@@ -10,9 +10,8 @@ import Iconify from '../../../components/Iconify';
 
 // ----------------------------------------------------------------------
 
+// eslint-disable-next-line react/prop-types
 export default function LoginForm({ signIn }) {
-  const navigate = useNavigate();
-
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({

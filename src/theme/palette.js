@@ -124,21 +124,21 @@ const palette = {
   },
 };
 
-const updatedPalette = {
-  light: {
-    ...palette,
-    mode: 'light',
-    text: { primary: GREY[800], secondary: GREY[600], disabled: GREY[500] },
-    background: { paper: '#fff', default: '#fff', neutral: GREY[200] },
-    action: { active: GREY[600], ...palette.action },
-  },
-  dark: {
-    ...palette,
-    mode: 'dark',
-    text: { primary: '#fff', secondary: GREY[500], disabled: GREY[600] },
-    background: { paper: GREY[800], default: GREY[900], neutral: GREY[500_16] },
-    action: { active: GREY[500], ...palette.action },
-  },
-}
+// const updatedPalette = {
+//   light: {
+//     ...palette,
+//     mode: 'light',
+//     text: { primary: GREY[800], secondary: GREY[600], disabled: GREY[500] },
+//     background: { paper: '#fff', default: '#fff', neutral: GREY[200] },
+//     action: { active: GREY[600], ...palette.action },
+//   },
+//   dark: {
+//     ...palette,
+//     mode: 'dark',
+//     text: { primary: '#fff', secondary: GREY[500], disabled: GREY[600] },
+//     background: { paper: GREY[800], default: GREY[900], neutral: GREY[500_16] },
+//     action: { active: GREY[500], ...palette.action },
+//   },
+// }
 
 export default palette;

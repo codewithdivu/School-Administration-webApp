@@ -1,10 +1,10 @@
 import * as Yup from 'yup';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
-import { Box, Grid, Card, Stack, Typography } from '@mui/material';
+import { Box, Grid, Card, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // hooks
 // import useAuth from '../../../../hooks/useAuth';
@@ -14,7 +14,7 @@ import { LoadingButton } from '@mui/lab';
 // components
 import { FormProvider, RHFTextField } from '../../hook-form';
 import useAuthenticateUser from '../../../hooks/useAuthenticateUser';
-import { updateAuth, updateUser } from '../../../firebase/services';
+import { updateUser } from '../../../firebase/services';
 import useUserProfile from '../../../hooks/useUserProfile';
 import Loader from '../../Loader';
 

@@ -34,28 +34,26 @@ export default function RegisterForm() {
     await createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         // Signed in
-        const user = userCredential.user;
+        const { user } = userCredential;
         // console.log('user', user);
         if (user) {
           const isAuthUpdated = await updateAuth({ displayName: fullName, email });
           if (isAuthUpdated) {
-            await addUser({ ...user?.providerData[0], displayName: fullName, email });
+            await addUser({ ...user?.providerData[0], displayName: fullName, email, role });
             if (user.emailVerified === false) {
               sendEmailVerification(auth.currentUser, { url: 'http://localhost:3000' })
                 .then(() => {
+                  // eslint-disable-next-line no-alert
                   alert('we have sent you a verification link in your mail please...kindly verify it');
                   navigate('/login', { replace: true });
                 })
-                .catch((error) => {});
+                .catch(() => {});
             }
           }
         }
       })
       .catch((error) => {
         console.log('error', error);
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
       });
   };
 

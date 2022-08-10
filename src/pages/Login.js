@@ -108,24 +108,22 @@ export default function Login() {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
-        const user = userCredential.user;
+        const { user } = userCredential;
 
         if (user.emailVerified) {
           navigate('/dashboard/app', { replace: true });
         } else {
           sendEmailVerification(auth.currentUser, { url: 'http://localhost:3000' })
             .then(() => {
+              // eslint-disable-next-line no-alert
               alert('we have sent you a verification link in your mail please...kindly verify it');
               // navigate('/login', { replace: true });
             })
-            .catch((error) => {});
+            .catch(() => {});
         }
         // ...
       })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-      });
+      .catch(() => {});
   };
 
   const handleSignIn = (value, loginData = '') => {

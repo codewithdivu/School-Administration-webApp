@@ -11,7 +11,7 @@ import useTabs from '../hooks/useTabs';
 // components
 import HeaderBreadcrumbs from '../components/HeaderBreadcrumbs';
 // sections
-import { ProfileAbout, ProfileCover, ProfileSocialInfo } from '../components/profile';
+import { ProfileCover, ProfileSocialInfo } from '../components/profile';
 import Iconify from '../components/Iconify';
 
 import useUserProfile from '../hooks/useUserProfile';

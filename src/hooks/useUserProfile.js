@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
-import { collection, doc, onSnapshot, query, where } from 'firebase/firestore';
-import { auth, db } from '../firebase/config';
+import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import { db } from '../firebase/config';
 import { USERS } from '../firebase/collections';
 
 const useUserProfile = (email) => {
   const [userProfileData, setUserProfileData] = useState(null);
   const [isProfileLoading, setIsProfileLoading] = useState(true);
 
+  // eslint-disable-next-line consistent-return
   useEffect(() => {
     if (email) {
       const q = query(collection(db, USERS), where('email', '==', email));

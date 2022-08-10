@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import {  useEffect, useState } from 'react';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -14,7 +14,7 @@ import { LoadingButton } from '@mui/lab';
 // components
 import { FormProvider, RHFSelect, RHFTextField } from '../../hook-form';
 import useAuthenticateUser from '../../../hooks/useAuthenticateUser';
-import { updateAuth, updateUser } from '../../../firebase/services';
+import {  updateUser } from '../../../firebase/services';
 import useUserProfile from '../../../hooks/useUserProfile';
 import Loader from '../../Loader';
 
@@ -83,7 +83,7 @@ const FamilyAccount = () => {
     // }
 
     try {
-      const isDataUpdated = await updateUser({ ...formData, id: userProfileData.id });
+      await updateUser({ ...formData, id: userProfileData.id });
       setIsUserAdding(false);
     } catch (error) {
       console.error(error);

@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { alpha } from '@mui/material/styles';
@@ -41,7 +41,6 @@ export default function AccountPopover() {
   const {
     user: { photoURL, displayName, email },
   } = useAuthenticateUser();
-
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);

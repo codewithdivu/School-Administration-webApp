@@ -6,6 +6,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { Controller, useFormContext } from 'react-hook-form';
 
+// eslint-disable-next-line react/prop-types
 export default function RHFDatePicker({ name, ...other }) {
   const { control } = useFormContext();
 
