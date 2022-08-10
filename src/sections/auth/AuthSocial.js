@@ -18,7 +18,7 @@ export default function AuthSocial({ signIn }) {
             size="large"
             color="inherit"
             variant="outlined"
-            onClick={(e) => signIn(e, item.value)}
+            onClick={() => signIn(item.value)}
           >
             <Iconify icon={`eva:${item.value}-fill`} color={item.color} width={22} height={22} />
           </Button>

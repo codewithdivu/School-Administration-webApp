@@ -9,7 +9,7 @@ const useAuthenticateUser = () => {
 
   useEffect(() => {
     const subscription = onAuthStateChanged(auth, (user) => {
-      if (user) {
+      if (user && user.emailVerified) {
         localStorage.setItem('authUser', JSON.stringify(user));
         setUser(user);
         setIsLoader(false);

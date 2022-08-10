@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Link, Card, CardHeader, Stack } from '@mui/material';
@@ -18,32 +19,32 @@ const IconStyle = styled(Iconify)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 ProfileSocialInfo.propTypes = {
-  profile: PropTypes.object,
+  socialProfile: PropTypes.object,
 };
 
-export default function ProfileSocialInfo({ profile }) {
-  const { facebookLink, instagramLink, linkedinLink, twitterLink } = profile;
-
+export default function ProfileSocialInfo({ socialProfile = {} }) {
+  const { facebook, instagram, linkedIn, twitter } = socialProfile;
+  console.log('socialProfile', socialProfile);
   const SOCIALS = [
     {
       name: 'Linkedin',
       icon: <IconStyle icon={'eva:linkedin-fill'} color="#006097" />,
-      href: linkedinLink,
+      href: linkedIn,
     },
     {
       name: 'Twitter',
       icon: <IconStyle icon={'eva:twitter-fill'} color="#1C9CEA" />,
-      href: twitterLink,
+      href: twitter,
     },
     {
       name: 'Instagram',
       icon: <IconStyle icon={'ant-design:instagram-filled'} color="#D7336D" />,
-      href: instagramLink,
+      href: instagram,
     },
     {
       name: 'Facebook',
       icon: <IconStyle icon={'eva:facebook-fill'} color="#1877F2" />,
-      href: facebookLink,
+      href: facebook,
     },
   ];
 
@@ -54,7 +55,14 @@ export default function ProfileSocialInfo({ profile }) {
         {SOCIALS.map((link) => (
           <Stack key={link.name} direction="row" alignItems="center">
             {link.icon}
-            <Link component="span" variant="body2" color="text.primary" noWrap>
+            <Link
+              component={RouterLink}
+              // to={{ pathName: link.href ?? '#' }}
+              // target={'_blank'}
+              variant="body2"
+              color="text.primary"
+              noWrap
+            >
               {link.href}
             </Link>
           </Stack>

@@ -9,7 +9,7 @@ import MenuPopover from '../../components/MenuPopover';
 // mocks_
 import { auth } from '../../firebase/config';
 // import useAuthenticateUser from '../../hooks/useAuthenticateUser';
-import { UserProfileContext } from '../../contexts/userContext';
+import useAuthenticateUser from '../../hooks/useAuthenticateUser';
 
 // ----------------------------------------------------------------------
 
@@ -38,11 +38,10 @@ export default function AccountPopover() {
 
   const [open, setOpen] = useState(null);
 
-  // const {
-  //   user: { userProfile.photoURL, userProfile.displayName, userProfile.email },
-  // } = useAuthenticateUser();
+  const {
+    user: { photoURL, displayName, email },
+  } = useAuthenticateUser();
 
-  const { userProfile } = useContext(UserProfileContext);
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
@@ -80,7 +79,7 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar src={userProfile?.photoURL} alt={userProfile?.displayName} />
+        <Avatar src={photoURL} alt={displayName} />
       </IconButton>
 
       <MenuPopover
@@ -99,10 +98,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {userProfile?.displayName}
+            {displayName}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {userProfile?.email}
+            {email}
           </Typography>
         </Box>
 

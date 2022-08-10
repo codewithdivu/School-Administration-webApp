@@ -11,9 +11,11 @@ import useTabs from '../hooks/useTabs';
 // components
 import HeaderBreadcrumbs from '../components/HeaderBreadcrumbs';
 // sections
-import { ProfileCover } from '../components/profile';
+import { ProfileAbout, ProfileCover, ProfileSocialInfo } from '../components/profile';
 import Iconify from '../components/Iconify';
 
+import useUserProfile from '../hooks/useUserProfile';
+import Loader from '../components/Loader';
 // ----------------------------------------------------------------------
 
 const TabsWrapperStyle = styled('div')(({ theme }) => ({
@@ -37,28 +39,34 @@ const TabsWrapperStyle = styled('div')(({ theme }) => ({
 export default function UserProfile() {
   const { user } = useAuthenticateUser();
 
-  const { currentTab, onChangeTab } = useTabs('profile');
+  const { userProfileData, isProfileLoading } = useUserProfile(user.email);
+
+  const { currentTab, onChangeTab } = useTabs('personal');
+
+  if (isProfileLoading) {
+    return <Loader isLoading={isProfileLoading} />;
+  }
 
   const PROFILE_TABS = [
     {
-      value: 'profile',
+      value: 'personal',
       icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
       // component: <Profile myProfile={_userAbout} posts={_userFeeds} />,
     },
     {
-      value: 'followers',
-      icon: <Iconify icon={'eva:heart-fill'} width={20} height={20} />,
-      //   component: <ProfileFollowers followers={_userFollowers} />,
+      value: 'educational',
+      icon: <Iconify icon={'eva:book-open-fill'} width={20} height={20} />,
+      // component: <ProfileAbout followers={_userFollowers} />,
     },
     {
-      value: 'friends',
+      value: 'family',
       icon: <Iconify icon={'eva:people-fill'} width={20} height={20} />,
       //   component: <ProfileFriends friends={_userFriends} findFriends={findFriends} onFindFriends={handleFindFriends} />,
     },
     {
-      value: 'gallery',
-      icon: <Iconify icon={'ic:round-perm-media'} width={20} height={20} />,
-      //   component: <ProfileGallery gallery={_userGallery} />,
+      value: 'socialMedia',
+      icon: <Iconify icon={'eva:linkedin-fill'} width={20} height={20} />,
+      component: <ProfileSocialInfo socialProfile={userProfileData} />,
     },
   ];
 

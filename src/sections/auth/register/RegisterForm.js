@@ -1,12 +1,16 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { useNavigate } from 'react-router-dom';
 // material
-import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
+import { Stack, TextField, IconButton, InputAdornment, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
 import Iconify from '../../../components/Iconify';
+import { roles } from '../../../constants/metadata';
+import { auth } from '../../../firebase/config';
+import { addUser, updateAuth } from '../../../firebase/services';
 
 // ----------------------------------------------------------------------
 
@@ -16,23 +20,54 @@ export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const RegisterSchema = Yup.object().shape({
-    firstName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('First name required'),
-    lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Last name required'),
+    fullName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('First name required'),
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
     password: Yup.string().required('Password is required'),
+    role: Yup.string().required('Role is required'),
   });
+
+  // methods
+
+  const handleRegister = async (userRegisteredData) => {
+    // console.log('registered data', userRegisteredData);
+    const { email, password, fullName, role } = userRegisteredData;
+    await createUserWithEmailAndPassword(auth, email, password)
+      .then(async (userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        // console.log('user', user);
+        if (user) {
+          const isAuthUpdated = await updateAuth({ displayName: fullName, email });
+          if (isAuthUpdated) {
+            await addUser({ ...user?.providerData[0], displayName: fullName, email });
+            if (user.emailVerified === false) {
+              sendEmailVerification(auth.currentUser, { url: 'http://localhost:3000' })
+                .then(() => {
+                  alert('we have sent you a verification link in your mail please...kindly verify it');
+                  navigate('/login', { replace: true });
+                })
+                .catch((error) => {});
+            }
+          }
+        }
+      })
+      .catch((error) => {
+        console.log('error', error);
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
+      });
+  };
 
   const formik = useFormik({
     initialValues: {
-      firstName: '',
-      lastName: '',
+      fullName: '',
       email: '',
       password: '',
+      role: '',
     },
     validationSchema: RegisterSchema,
-    onSubmit: () => {
-      navigate('/dashboard', { replace: true });
-    },
+    onSubmit: handleRegister,
   });
 
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
@@ -41,23 +76,13 @@ export default function RegisterForm() {
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Stack spacing={3}>
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-            <TextField
-              fullWidth
-              label="First name"
-              {...getFieldProps('firstName')}
-              error={Boolean(touched.firstName && errors.firstName)}
-              helperText={touched.firstName && errors.firstName}
-            />
-
-            <TextField
-              fullWidth
-              label="Last name"
-              {...getFieldProps('lastName')}
-              error={Boolean(touched.lastName && errors.lastName)}
-              helperText={touched.lastName && errors.lastName}
-            />
-          </Stack>
+          <TextField
+            fullWidth
+            label="Full name"
+            {...getFieldProps('fullName')}
+            error={Boolean(touched.fullName && errors.fullName)}
+            helperText={touched.fullName && errors.fullName}
+          />
 
           <TextField
             fullWidth
@@ -68,6 +93,25 @@ export default function RegisterForm() {
             error={Boolean(touched.email && errors.email)}
             helperText={touched.email && errors.email}
           />
+
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Role</InputLabel>
+            <Select
+              placeholder="Role"
+              label="Role"
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              {...getFieldProps('role')}
+              error={Boolean(touched.role && errors.role)}
+              helperText={touched.role && errors.role}
+            >
+              {roles.map((role) => (
+                <MenuItem key={role.value} selected value={role.value}>
+                  {role.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
           <TextField
             fullWidth

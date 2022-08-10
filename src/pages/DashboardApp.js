@@ -1,4 +1,3 @@
-import { useContext, useEffect } from 'react';
 import { faker } from '@faker-js/faker';
 // @mui
 import { useTheme } from '@mui/material/styles';
@@ -19,27 +18,11 @@ import {
   AppConversionRates,
 } from '../sections/@dashboard/app';
 import useAuthenticateUser from '../hooks/useAuthenticateUser';
-import { UserProfileContext } from '../contexts/userContext';
-import { getUserDataById } from '../firebase/services';
 
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
   const theme = useTheme();
-
-  const {setUserProfile } = useContext(UserProfileContext);
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const userDataById = await getUserDataById();
-      if (userDataById) {
-        setUserProfile(userDataById);
-      }
-      // console.log('userDataById', userDataById);
-    };
-    fetchUserData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  // console.log('profileData', userProfile);
 
   const { user } = useAuthenticateUser();
 

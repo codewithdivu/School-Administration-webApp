@@ -1,4 +1,4 @@
-import { signInWithPopup } from 'firebase/auth';
+import { sendEmailVerification, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
@@ -101,12 +101,42 @@ export default function Login() {
       });
   };
 
-  const handleSignIn = (e, value) => {
+  const handleEmailSignIn = async (loginData) => {
+    const { email, password } = loginData;
+    // console.log('email', email);
+    // console.log('password', password);
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+
+        if (user.emailVerified) {
+          navigate('/dashboard/app', { replace: true });
+        } else {
+          sendEmailVerification(auth.currentUser, { url: 'http://localhost:3000' })
+            .then(() => {
+              alert('we have sent you a verification link in your mail please...kindly verify it');
+              // navigate('/login', { replace: true });
+            })
+            .catch((error) => {});
+        }
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
+  };
+
+  const handleSignIn = (value, loginData = '') => {
     // console.log('value', value)
-    e.preventDefault();
+    // e.preventDefault();
     switch (value) {
       case 'google':
         handleGoogleSignIn();
+        break;
+      case 'email':
+        handleEmailSignIn(loginData);
         break;
 
       default:
@@ -153,7 +183,7 @@ export default function Login() {
 
             <AuthSocial signIn={handleSignIn} />
 
-            <LoginForm />
+            <LoginForm signIn={handleSignIn} />
 
             {!smUp && (
               <Typography variant="body2" align="center" sx={{ mt: 3 }}>

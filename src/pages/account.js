@@ -3,6 +3,9 @@ import Iconify from '../components/Iconify';
 import HeaderBreadcrumbs from '../components/HeaderBreadcrumbs';
 import useTabs from '../hooks/useTabs';
 import PersonalAccount from '../components/profile/PersonalAccount';
+import EducationalAccount from '../components/profile/EducationalAccount';
+import FamilyAccount from '../components/profile/FamilyAccount';
+import SocialAccount from '../components/profile/SocialAccount';
 
 // ----------------------------------------------------------------------
 
@@ -19,17 +22,17 @@ export default function AccountGeneral() {
     {
       value: 'educational',
       icon: <Iconify icon={'eva:book-open-fill'} width={20} height={20} />,
-      component: <PersonalAccount />,
+      component: <EducationalAccount />,
     },
     {
       value: 'family',
       icon: <Iconify icon={'eva:people-fill'} width={20} height={20} />,
-      component: <PersonalAccount />,
+      component: <FamilyAccount />,
     },
     {
       value: 'social_links',
       icon: <Iconify icon={'eva:linkedin-fill'} width={20} height={20} />,
-      component: <PersonalAccount />,
+      component: <SocialAccount />,
     },
     // {
     //   value: 'change_password',

@@ -7,28 +7,47 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Grid, Card, Stack, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // hooks
-// import useAuth from '../../../../hooks/useAuth';
-// utils
-// import { fData } from '../../../../utils/formatNumber';
-// _mock
 import { countries } from '../../../_mock/_countries';
 // components
-import { FormProvider, RHFSelect, RHFTextField, RHFUploadAvatar } from '../../hook-form';
+import { FormProvider, RHFSelect, RHFTextField, RHFUploadAvatar, RHFDatePicker } from '../../hook-form';
 import useAuthenticateUser from '../../../hooks/useAuthenticateUser';
 import { updateAuth, updateUser } from '../../../firebase/services';
 import useUserProfile from '../../../hooks/useUserProfile';
 import Loader from '../../Loader';
-import { UserProfileContext } from '../../../contexts/userContext';
+import { genderItems } from '../../../constants/metadata';
+import { regex } from '../../../constants/keywords';
+
+// ................................................................................................................................
 
 const PersonalAccount = () => {
+  // HOOKS
+
   const { user } = useAuthenticateUser();
-  const { userProfile, setUserProfile } = useContext(UserProfileContext);
   const { userProfileData, isProfileLoading } = useUserProfile(user?.email);
 
   const [isUserAdding, setIsUserAdding] = useState(false);
 
+  // CONSTANTS
+
   const UpdateUserSchema = Yup.object().shape({
     displayName: Yup.string().required('Name is required'),
+    email: Yup.string().email(),
+    phoneNumber: Yup.string()
+      .required('required')
+      .matches(regex.phoneRegExp, 'Phone number is not valid')
+      .min(10, 'to short')
+      .max(10, 'to long'),
+    birthDate: Yup.date().required('Birth Date is required'),
+    address: Yup.string().required('Address is required'),
+    gender: Yup.string().required('Gender is required'),
+    country: Yup.string().required('Country is required'),
+    state: Yup.string().required('State is required'),
+    city: Yup.string().required('City is required'),
+    zipCode: Yup.number()
+      .min(100000, 'Must be exactly 6 characters')
+      .max(999999, 'Must be exactly 6 characters')
+      .required('ZipCode is required'),
+    about: Yup.string().required('About is required'),
   });
 
   const methods = useForm({
@@ -42,30 +61,36 @@ const PersonalAccount = () => {
   } = methods;
 
   useEffect(() => {
-    if (userProfile) {
-      setValue('photoURL', userProfile.photoURL);
-      setValue('email', userProfile.email);
-      setValue('displayName', userProfile.displayName);
-      setValue('phoneNumber', userProfile.phoneNumber);
-      setValue('country', userProfile.country);
-      setValue('address', userProfile.address);
-      setValue('state', userProfile.state);
-      setValue('city', userProfile.city);
-      setValue('zipCode', userProfile.zipCode);
-      setValue('about', userProfile.about);
+    if (userProfileData) {
+      setValue('photoURL', userProfileData.photoURL);
+      setValue('email', userProfileData.email);
+      setValue('displayName', userProfileData.displayName);
+      setValue('phoneNumber', userProfileData.phoneNumber);
+      setValue('country', userProfileData.country);
+      setValue('address', userProfileData.address);
+      setValue('state', userProfileData.state);
+      setValue('city', userProfileData.city);
+      setValue('zipCode', userProfileData.zipCode);
+      setValue('about', userProfileData.about);
+      setValue('gender', userProfileData.gender);
+      setValue('birthDate', userProfileData.birthDate);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userProfile]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userProfileData]);
+
+  // METHODS
 
   const onSubmit = async (formData) => {
+    // console.log('formData', formData);
+
     setIsUserAdding(true);
     const authUpdateData = {};
     // eslint-disable-next-line no-unused-vars
     const { email, isPublic, ...rest } = formData;
-    if (userProfile.displayName !== formData.displayName) {
+    if (userProfileData.displayName !== formData.displayName) {
       authUpdateData.displayName = formData.displayName;
     }
-    if (userProfile.phoneNumber !== formData.phoneNumber) {
+    if (userProfileData.phoneNumber !== formData.phoneNumber) {
       authUpdateData.phoneNumber = formData.phoneNumber;
     }
 
@@ -74,9 +99,8 @@ const PersonalAccount = () => {
     }
 
     try {
-      const isDataUpdated = await updateUser({ ...rest, id: userProfile.id });
+      const isDataUpdated = await updateUser({ ...rest, id: userProfileData.id });
       console.log('isUpdated', isDataUpdated);
-      setUserProfile(userProfileData);
       setIsUserAdding(false);
     } catch (error) {
       console.error(error);
@@ -99,6 +123,7 @@ const PersonalAccount = () => {
     },
     [setValue]
   );
+
   if (isProfileLoading) {
     return <Loader isLoading={isProfileLoading} />;
   }
@@ -144,7 +169,15 @@ const PersonalAccount = () => {
               <RHFTextField name="displayName" label="Name" />
               <RHFTextField disabled name="email" label="Email Address" />
               <RHFTextField name="phoneNumber" label="Phone Number" />
+              <RHFDatePicker name="birthDate" label="Birth Date" />
               <RHFTextField name="address" label="Address" />
+              <RHFSelect name="gender" label="Gender">
+                {genderItems.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </RHFSelect>
               <RHFSelect name="country" label="Country" placeholder="Country">
                 <option value="" />
                 {countries.map((option) => (

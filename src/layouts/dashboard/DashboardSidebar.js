@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
@@ -15,7 +15,7 @@ import NavSection from '../../components/NavSection';
 //
 import navConfig from './NavConfig';
 // import useAuthenticateUser from '../../hooks/useAuthenticateUser';
-import { UserProfileContext } from '../../contexts/userContext';
+import useAuthenticateUser from '../../hooks/useAuthenticateUser';
 
 // ----------------------------------------------------------------------
 
@@ -46,11 +46,9 @@ DashboardSidebar.propTypes = {
 export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const { pathname } = useLocation();
 
-  // const {
-  //   user: { userProfile.photoURL, userProfile.displayName },
-  // } = useAuthenticateUser();
-
-  const { userProfile } = useContext(UserProfileContext);
+  const {
+    user: { photoURL, displayName },
+  } = useAuthenticateUser();
 
   const isDesktop = useResponsive('up', 'lg');
 
@@ -75,10 +73,10 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       <Box sx={{ mb: 5, mx: 2.5 }}>
         <Link underline="none" component={RouterLink} to="#">
           <AccountStyle>
-            <Avatar src={userProfile?.photoURL} alt={userProfile?.displayName} />
+            <Avatar src={photoURL} alt={displayName} />
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                {userProfile?.displayName}
+                {displayName}
               </Typography>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                 {account.role}

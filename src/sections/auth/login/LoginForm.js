@@ -10,7 +10,7 @@ import Iconify from '../../../components/Iconify';
 
 // ----------------------------------------------------------------------
 
-export default function LoginForm() {
+export default function LoginForm({ signIn }) {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -27,8 +27,8 @@ export default function LoginForm() {
       remember: true,
     },
     validationSchema: LoginSchema,
-    onSubmit: () => {
-      navigate('/dashboard', { replace: true });
+    onSubmit: (loginData) => {
+      signIn('email', loginData);
     },
   });
 

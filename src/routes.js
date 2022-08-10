@@ -13,6 +13,7 @@ import useAuthenticateUser from './hooks/useAuthenticateUser';
 import Loader from './components/Loader';
 import AccountGeneral from './pages/account';
 import Profile from './pages/profile';
+import Register from './pages/Register';
 
 // ----------------------------------------------------------------------
 
@@ -46,7 +47,7 @@ export default function Router() {
       children: [
         { path: '/', element: <Navigate to="/dashboard/app" /> },
         { path: 'login', element: <Login /> },
-        // { path: 'register', element: <Register /> },
+        { path: 'register', element: <Register /> },
         { path: '404', element: <NotFound /> },
         { path: '*', element: <Navigate to="/404" /> },
       ],
