@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useMemo } from 'react';
+import { useMemo, useContext } from 'react';
 // material
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider as MUIThemeProvider, createTheme, StyledEngineProvider } from '@mui/material/styles';
@@ -8,6 +8,7 @@ import palette from './palette';
 import typography from './typography';
 import componentsOverride from './overrides';
 import shadows, { customShadows } from './shadows';
+import { ThemeModeContext } from '../contexts/useThemes';
 
 // ----------------------------------------------------------------------
 
@@ -16,19 +17,19 @@ ThemeProvider.propTypes = {
 };
 
 export default function ThemeProvider({ children }) {
+  const { themeMode, setthemeMode } = useContext(ThemeModeContext);
+
   // console.log('palette', palette);
   const themeOptions = useMemo(
     () => ({
-      palette,
+      palette: themeMode ? palette.dark : palette.light,
       shape: { borderRadius: 8 },
       typography,
-      shadows,
-      customShadows,
+      shadows: themeMode ? shadows.dark : shadows.light,
+      customShadows: themeMode ? customShadows.dark : customShadows.light,
     }),
-    []
+    [themeMode]
   );
-
-
 
   const theme = createTheme(themeOptions);
   // theme.pallete.mode = 'dark';

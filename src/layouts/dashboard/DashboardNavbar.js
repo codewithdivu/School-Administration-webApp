@@ -9,6 +9,7 @@ import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
 import ThemeToggle from './ThemeToggle';
 import NotificationsPopover from './NotificationsPopover';
+import { ThemeModeContext } from '../../contexts/useThemes';
 
 // ----------------------------------------------------------------------
 
@@ -41,6 +42,7 @@ DashboardNavbar.propTypes = {
 };
 
 export default function DashboardNavbar({ onOpenSidebar }) {
+
   return (
     <RootStyle>
       <ToolbarStyle>

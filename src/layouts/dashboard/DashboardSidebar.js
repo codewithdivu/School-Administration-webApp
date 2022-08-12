@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
@@ -16,6 +16,7 @@ import NavSection from '../../components/NavSection';
 import navConfig from './NavConfig';
 // import useAuthenticateUser from '../../hooks/useAuthenticateUser';
 import useAuthenticateUser from '../../hooks/useAuthenticateUser';
+import { UserProfileContext } from '../../contexts/userContext';
 
 // ----------------------------------------------------------------------
 
@@ -45,7 +46,9 @@ DashboardSidebar.propTypes = {
 
 export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const { pathname } = useLocation();
+  const { userProfile, setUserProfile } = useContext(UserProfileContext);
 
+  console.log('userDatatata', userProfile);
   const {
     user: { photoURL, displayName },
   } = useAuthenticateUser();

@@ -24,7 +24,7 @@ ProfileSocialInfo.propTypes = {
 
 export default function ProfileSocialInfo({ socialProfile = {} }) {
   const { facebook, instagram, linkedIn, twitter } = socialProfile;
-  console.log('socialProfile', socialProfile);
+  // console.log('socialProfile', socialProfile);
   const SOCIALS = [
     {
       name: 'Linkedin',
@@ -57,8 +57,8 @@ export default function ProfileSocialInfo({ socialProfile = {} }) {
             {link.icon}
             <Link
               component={RouterLink}
-              // to={{ pathName: link.href ?? '#' }}
-              // target={'_blank'}
+              to={{ pathName: link.href ?? '#' }}
+              target={'_blank'}
               variant="body2"
               color="text.primary"
               noWrap

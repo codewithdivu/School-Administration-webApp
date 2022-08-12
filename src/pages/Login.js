@@ -1,4 +1,5 @@
 import { sendEmailVerification, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { useContext } from 'react';
 
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
@@ -15,6 +16,8 @@ import AuthSocial from '../sections/auth/AuthSocial';
 
 import { auth, provider } from '../firebase/config';
 import { addUser, getUserData } from '../firebase/services';
+import { UserProfileContext } from '../contexts/userContext';
+import config from '../config';
 
 // ----------------------------------------------------------------------
 
@@ -65,6 +68,7 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function Login() {
   const navigate = useNavigate();
+  const { userProfile, setUserProfile } = useContext(UserProfileContext);
 
   const handleGoogleSignIn = async () => {
     await signInWithPopup(auth, provider)
@@ -77,6 +81,10 @@ export default function Login() {
         // console.log('user',user);
         if (user.email) {
           const response = await getUserData(user.email);
+          if (response) {
+            localStorage.setItem('userProfileData', JSON.stringify(response));
+            setUserProfile(response);
+          }
           // console.log('response', response);
           if (!response) {
             await addUser({ ...user?.providerData[0] });
@@ -106,14 +114,20 @@ export default function Login() {
     // console.log('email', email);
     // console.log('password', password);
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         // Signed in
         const { user } = userCredential;
 
         if (user.emailVerified) {
+          const response = await getUserData(user.email);
+          if (response) {
+            localStorage.setItem('userProfileData', JSON.stringify(response));
+            setUserProfile(response);
+          }
+
           navigate('/dashboard/app', { replace: true });
         } else {
-          sendEmailVerification(auth.currentUser, { url: 'http://localhost:3000' })
+          sendEmailVerification(auth.currentUser, { url: config.BASE_URL })
             .then(() => {
               // eslint-disable-next-line no-alert
               alert('we have sent you a verification link in your mail please...kindly verify it');

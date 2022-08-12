@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useContext } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { alpha } from '@mui/material/styles';
@@ -10,6 +10,8 @@ import MenuPopover from '../../components/MenuPopover';
 import { auth } from '../../firebase/config';
 // import useAuthenticateUser from '../../hooks/useAuthenticateUser';
 import useAuthenticateUser from '../../hooks/useAuthenticateUser';
+import { UserProfileContext } from '../../contexts/userContext';
+import { roles } from '../../constants/metadata';
 
 // ----------------------------------------------------------------------
 
@@ -35,7 +37,8 @@ const MENU_OPTIONS = [
 
 export default function AccountPopover() {
   const anchorRef = useRef(null);
-
+  const { userProfile, setUserProfile } = useContext(UserProfileContext);
+  // console.log('userPeo',userProfile)
   const [open, setOpen] = useState(null);
 
   const {
@@ -101,6 +104,9 @@ export default function AccountPopover() {
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
             {email}
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+            {userProfile?.role && roles.find((item) => item.value === userProfile.role)?.label}
           </Typography>
         </Box>
 

@@ -21,7 +21,7 @@ export default function AppTasks({ title, subheader, list, ...other }) {
       checked: [list[2].id],
     },
     onSubmit: (values) => {
-      console.log(values);
+      // console.log(values);
     },
   });
 

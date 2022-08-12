@@ -11,6 +11,7 @@ import Iconify from '../../../components/Iconify';
 import { roles } from '../../../constants/metadata';
 import { auth } from '../../../firebase/config';
 import { addUser, updateAuth } from '../../../firebase/services';
+import config from '../../../config';
 
 // ----------------------------------------------------------------------
 
@@ -41,7 +42,7 @@ export default function RegisterForm() {
           if (isAuthUpdated) {
             await addUser({ ...user?.providerData[0], displayName: fullName, email, role });
             if (user.emailVerified === false) {
-              sendEmailVerification(auth.currentUser, { url: 'http://localhost:3000' })
+              sendEmailVerification(auth.currentUser, { url: config.BASE_URL })
                 .then(() => {
                   // eslint-disable-next-line no-alert
                   alert('we have sent you a verification link in your mail please...kindly verify it');
@@ -53,7 +54,7 @@ export default function RegisterForm() {
         }
       })
       .catch((error) => {
-        console.log('error', error);
+        // console.log('error', error);
       });
   };
 

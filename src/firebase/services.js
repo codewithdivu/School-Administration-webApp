@@ -73,7 +73,7 @@ export const addUser = async (userData) =>
       .then(() => resolve(true))
       .catch((error) => {
         resolve(false);
-        console.log('error', error);
+        // console.log('error', error);
       });
   });
 
