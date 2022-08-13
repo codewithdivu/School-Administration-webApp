@@ -100,7 +100,7 @@ const PersonalAccount = () => {
 
     try {
       const isDataUpdated = await updateUser({ ...rest, id: userProfileData.id });
-      console.log('isUpdated', isDataUpdated);
+      // console.log('isUpdated', isDataUpdated);
       setIsUserAdding(false);
     } catch (error) {
       console.error(error);

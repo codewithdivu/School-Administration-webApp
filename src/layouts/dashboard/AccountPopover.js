@@ -59,6 +59,8 @@ export default function AccountPopover() {
     await signOut(auth)
       .then(() => {})
       .catch(() => {});
+
+      
   };
 
   return (

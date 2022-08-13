@@ -17,6 +17,7 @@ import navConfig from './NavConfig';
 // import useAuthenticateUser from '../../hooks/useAuthenticateUser';
 import useAuthenticateUser from '../../hooks/useAuthenticateUser';
 import { UserProfileContext } from '../../contexts/userContext';
+import { getSidebarMenus } from '../../utils/helper';
 
 // ----------------------------------------------------------------------
 
@@ -46,9 +47,8 @@ DashboardSidebar.propTypes = {
 
 export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const { pathname } = useLocation();
-  const { userProfile, setUserProfile } = useContext(UserProfileContext);
+  const { userProfile } = useContext(UserProfileContext);
 
-  console.log('userDatatata', userProfile);
   const {
     user: { photoURL, displayName },
   } = useAuthenticateUser();
@@ -56,11 +56,12 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const isDesktop = useResponsive('up', 'lg');
 
   useEffect(() => {
-    if (isOpenSidebar) {
-      onCloseSidebar();
-    }
+    if (isOpenSidebar) onCloseSidebar();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
+
+  const newNavConfig = getSidebarMenus(navConfig, userProfile?.role);
+  // console.log('newNavConfig', newNavConfig);
 
   const renderContent = (
     <Scrollbar
@@ -89,7 +90,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
         </Link>
       </Box>
 
-      <NavSection navConfig={navConfig} />
+      <NavSection navConfig={newNavConfig} />
 
       <Box sx={{ flexGrow: 1 }} />
     </Scrollbar>

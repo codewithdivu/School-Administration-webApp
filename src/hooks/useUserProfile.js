@@ -9,6 +9,9 @@ const useUserProfile = (email) => {
 
   // eslint-disable-next-line consistent-return
   useEffect(() => {
+    if (!email) {
+      setIsProfileLoading(false);
+    }
     if (email) {
       const q = query(collection(db, USERS), where('email', '==', email));
       const unsub = onSnapshot(q, (querySnapShot) => {

@@ -40,4 +40,8 @@ export const roles = [
     value: 13,
     label: 'Student',
   },
+  {
+    value: 29,
+    label: 'Librarian',
+  },
 ];

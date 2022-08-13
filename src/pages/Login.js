@@ -68,70 +68,36 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function Login() {
   const navigate = useNavigate();
-  const { userProfile, setUserProfile } = useContext(UserProfileContext);
 
   const handleGoogleSignIn = async () => {
     await signInWithPopup(auth, provider)
       .then(async (result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        // const credential = GoogleAuthProvider.credentialFromResult(result);
-        // The signed-in user info.
         const { user } = result;
-        // console.log('result', result);
-        // console.log('user',user);
         if (user.email) {
           const response = await getUserData(user.email);
-          if (response) {
-            localStorage.setItem('userProfileData', JSON.stringify(response));
-            setUserProfile(response);
-          }
-          // console.log('response', response);
+
           if (!response) {
             await addUser({ ...user?.providerData[0] });
           }
           navigate('/dashboard/app');
         }
-
-        // console.log('user', user);
-
-        // console.log('google account', user);
-        // ...
       })
-      .catch(() => {
-        // Handle Errors here.
-        // const errorCode = error.code;
-        // const errorMessage = error.message;
-        // The email of the user's account used.
-        // const email = error.customData.email;
-        // The AuthCredential type that was used.
-        // const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
-      });
+      .catch(() => {});
   };
 
   const handleEmailSignIn = async (loginData) => {
     const { email, password } = loginData;
-    // console.log('email', email);
-    // console.log('password', password);
     signInWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
-        // Signed in
         const { user } = userCredential;
 
         if (user.emailVerified) {
-          const response = await getUserData(user.email);
-          if (response) {
-            localStorage.setItem('userProfileData', JSON.stringify(response));
-            setUserProfile(response);
-          }
-
           navigate('/dashboard/app', { replace: true });
         } else {
           sendEmailVerification(auth.currentUser, { url: config.BASE_URL })
             .then(() => {
               // eslint-disable-next-line no-alert
               alert('we have sent you a verification link in your mail please...kindly verify it');
-              // navigate('/login', { replace: true });
             })
             .catch(() => {});
         }

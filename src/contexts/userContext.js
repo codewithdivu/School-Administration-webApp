@@ -8,9 +8,7 @@ export const UserProfileProvider = ({ children }) => {
   const [userProfile, setUserProfile] = useState(null);
 
   useEffect(() => {
-    if (userLocalProfileData) {
-      setUserProfile(JSON.parse(userLocalProfileData));
-    }
+    if (userLocalProfileData) setUserProfile(JSON.parse(userLocalProfileData));
   }, []);
 
   return <UserProfileContext.Provider value={{ userProfile, setUserProfile }}>{children}</UserProfileContext.Provider>;
