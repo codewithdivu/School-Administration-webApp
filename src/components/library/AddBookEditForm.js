@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-// import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import { useCallback, useEffect, useMemo } from 'react';
 // form
@@ -27,25 +26,8 @@ import {
 const GENDER_OPTION = ['Men', 'Women', 'Kids'];
 
 const CATEGORY_OPTION = [
-  { group: 'Clothing', classify: ['Shirts', 'T-shirts', 'Jeans', 'Leather'] },
-  { group: 'Tailored', classify: ['Suits', 'Blazers', 'Trousers', 'Waistcoats'] },
-  { group: 'Accessories', classify: ['Shoes', 'Backpacks and bags', 'Bracelets', 'Face masks'] },
-];
-
-const TAGS_OPTION = [
-  'Toy Story 3',
-  'Logan',
-  'Full Metal Jacket',
-  'Dangal',
-  'The Sting',
-  '2001: A Space Odyssey',
-  "Singin' in the Rain",
-  'Toy Story',
-  'Bicycle Thieves',
-  'The Kid',
-  'Inglourious Basterds',
-  'Snatch',
-  '3 Idiots',
+  { group: 'Standard', classify: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
+  { group: 'Others', classify: ['History', 'Novels', 'Stories', 'GK'] },
 ];
 
 const LabelStyle = styled(Typography)(({ theme }) => ({
@@ -58,38 +40,32 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 
 AddBookEditForm.propTypes = {
   isEdit: PropTypes.bool,
-  currentProduct: PropTypes.object,
+  currentBook: PropTypes.object,
 };
 
-export default function AddBookEditForm({ isEdit, currentProduct }) {
+export default function AddBookEditForm({ isEdit, currentBook }) {
   const navigate = useNavigate();
-
-  //   const { enqueueSnackbar } = useSnackbar();
 
   const NewProductSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     description: Yup.string().required('Description is required'),
     images: Yup.array().min(1, 'Images is required'),
     price: Yup.number().moreThan(0, 'Price should not be $0.00'),
+    category: Yup.string().required('Category is required'),
+    code: Yup.number().required('Book Code is required'),
   });
 
   const defaultValues = useMemo(
     () => ({
-      name: currentProduct?.name || '',
-      description: currentProduct?.description || '',
-      images: currentProduct?.images || [],
-      code: currentProduct?.code || '',
-      sku: currentProduct?.sku || '',
-      price: currentProduct?.price || 0,
-      priceSale: currentProduct?.priceSale || 0,
-      tags: currentProduct?.tags || [TAGS_OPTION[0]],
-      inStock: true,
-      taxes: true,
-      gender: currentProduct?.gender || GENDER_OPTION[2],
-      category: currentProduct?.category || CATEGORY_OPTION[0].classify[1],
+      name: currentBook?.name || '',
+      description: currentBook?.description || '',
+      images: currentBook?.images || [],
+      code: currentBook?.code || '',
+      price: currentBook?.price || 0,
+      category: currentBook?.category || CATEGORY_OPTION[0].classify[1],
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [currentProduct]
+    [currentBook]
   );
 
   const methods = useForm({
@@ -110,24 +86,17 @@ export default function AddBookEditForm({ isEdit, currentProduct }) {
   const values = watch();
 
   useEffect(() => {
-    if (isEdit && currentProduct) {
+    if (isEdit && currentBook) {
       reset(defaultValues);
     }
     if (!isEdit) {
       reset(defaultValues);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEdit, currentProduct]);
+  }, [isEdit, currentBook]);
 
-  const onSubmit = async () => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      //   enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
-      //   navigate(PATH_DASHBOARD.eCommerce.list);
-    } catch (error) {
-      console.error(error);
-    }
+  const onSubmit = async (bookData) => {
+    console.log('bookData', bookData);
   };
 
   const handleDrop = useCallback(
@@ -159,16 +128,11 @@ export default function AddBookEditForm({ isEdit, currentProduct }) {
         <Grid item xs={12} md={8}>
           <Card sx={{ p: 3 }}>
             <Stack spacing={3}>
-              <RHFTextField name="name" label="Product Name" />
-              <RHFTextField name="description" label="Product Description" multiline maxRows={6} />
-
-              {/* <div>
-                <LabelStyle>Description</LabelStyle>
-                <RHFEditor simple name="description" />
-              </div> */}
+              <RHFTextField name="name" label="Book Name" />
+              <RHFTextField name="description" label="Book Description" multiline maxRows={6} />
 
               <div>
-                <LabelStyle>Images</LabelStyle>
+                <LabelStyle>Book Images</LabelStyle>
                 <RHFUploadMultiFile
                   name="images"
                   showPreview
@@ -186,22 +150,8 @@ export default function AddBookEditForm({ isEdit, currentProduct }) {
         <Grid item xs={12} md={4}>
           <Stack spacing={3}>
             <Card sx={{ p: 3 }}>
-              <RHFSwitch name="inStock" label="In stock" />
-
               <Stack spacing={3} mt={2}>
-                <RHFTextField name="code" label="Product Code" />
-                <RHFTextField name="sku" label="Product SKU" />
-
-                <div>
-                  <LabelStyle>Gender</LabelStyle>
-                  <RHFRadioGroup
-                    name="gender"
-                    options={GENDER_OPTION}
-                    sx={{
-                      '& .MuiFormControlLabel-root': { mr: 4 },
-                    }}
-                  />
-                </div>
+                <RHFTextField name="code" label="Book Code" />
 
                 <RHFSelect name="category" label="Category">
                   {CATEGORY_OPTION.map((category) => (
@@ -214,26 +164,6 @@ export default function AddBookEditForm({ isEdit, currentProduct }) {
                     </optgroup>
                   ))}
                 </RHFSelect>
-
-                <Controller
-                  name="tags"
-                  control={control}
-                  render={({ field }) => (
-                    <Autocomplete
-                      {...field}
-                      multiple
-                      freeSolo
-                      onChange={(event, newValue) => field.onChange(newValue)}
-                      options={TAGS_OPTION.map((option) => option)}
-                      renderTags={(value, getTagProps) =>
-                        value.map((option, index) => (
-                          <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
-                        ))
-                      }
-                      renderInput={(params) => <TextField label="Tags" {...params} />}
-                    />
-                  )}
-                />
               </Stack>
             </Card>
 
@@ -241,7 +171,7 @@ export default function AddBookEditForm({ isEdit, currentProduct }) {
               <Stack spacing={3} mb={2}>
                 <RHFTextField
                   name="price"
-                  label="Regular Price"
+                  label="Price"
                   placeholder="0.00"
                   value={getValues('price') === 0 ? '' : getValues('price')}
                   onChange={(event) => setValue('price', Number(event.target.value))}
@@ -251,22 +181,7 @@ export default function AddBookEditForm({ isEdit, currentProduct }) {
                     type: 'number',
                   }}
                 />
-
-                <RHFTextField
-                  name="priceSale"
-                  label="Sale Price"
-                  placeholder="0.00"
-                  value={getValues('priceSale') === 0 ? '' : getValues('priceSale')}
-                  onChange={(event) => setValue('price', Number(event.target.value))}
-                  InputLabelProps={{ shrink: true }}
-                  InputProps={{
-                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                    type: 'number',
-                  }}
-                />
               </Stack>
-
-              <RHFSwitch name="taxes" label="Price includes taxes" />
             </Card>
 
             <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>

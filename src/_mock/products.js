@@ -4,13 +4,13 @@ import { sample } from 'lodash';
 // ----------------------------------------------------------------------
 
 const PRODUCT_NAME = [
-  'Nike Air Force 1 NDESTRUKT',
-  'Nike Space Hippie 04',
-  'Nike Air Zoom Pegasus 37 A.I.R. Chaz Bear',
-  'Nike Blazer Low 77 Vintage',
-  'Nike ZoomX SuperRep Surge',
-  'Zoom Freak 2',
-  'Nike Air Max Zephyr',
+  'The Philosophers Stone',
+  'The Chamber of Secrets',
+  'The Prisoner of Azkaban',
+  'The Goblet of Fire',
+  'The Order of Phoenix',
+  'The Half Blood of Prince',
+  'The Deathly Hallows',
   'Jordan Delta',
   'Air Jordan XXXV PF',
   'Nike Waffle Racer Crater',

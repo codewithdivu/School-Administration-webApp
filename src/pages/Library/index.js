@@ -1,12 +1,16 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 // material
-import { Container, Stack, Typography } from '@mui/material';
+import { Container, Grid, Stack, Typography } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 // components
 import Page from '../../components/Page';
-import { ProductSort, ProductList, ProductCartWidget, ProductFilterSidebar } from '../../sections/@dashboard/products';
+import { ProductSort, ProductList, ProductCartWidget, ProductFilterSidebar } from '../../sections/@dashboard/library';
 // mock
 import PRODUCTS from '../../_mock/products';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
+import { UserProfileProvider } from '../../contexts/userContext';
+import SearchBar from '../../components/SearchBar';
 
 // ----------------------------------------------------------------------
 
@@ -14,6 +18,9 @@ import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 
 export default function Library() {
   const [openFilter, setOpenFilter] = useState(false);
+  // const { userProfile } = useContext(UserProfileProvider);
+  const userProfile = JSON.parse(localStorage.getItem('userProfileData'));
+  const navigate = useNavigate();
 
   const handleOpenFilter = () => {
     setOpenFilter(true);
@@ -23,13 +30,22 @@ export default function Library() {
     setOpenFilter(false);
   };
 
+  const navigateAddBook = () => {
+    navigate('/dashboard/library/addBook');
+  };
+
+  const renderAddBookButton =
+    userProfile.role === 29 ? (
+      <LoadingButton variant="contained" size="large" onClick={navigateAddBook}>
+        Add Books
+      </LoadingButton>
+    ) : (
+      <h1>hello</h1>
+    );
+
   return (
     <Page title="Dashboard: Library">
       <Container>
-        {/* <Typography variant="h5" sx={{ mb: 5 }}>
-          Library
-        </Typography> */}
-
         <HeaderBreadcrumbs
           heading="Library"
           links={[
@@ -37,8 +53,9 @@ export default function Library() {
             { name: 'Library', href: 'dashboard/library' },
           ]}
         />
-
+        <SearchBar />
         <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>
+          {renderAddBookButton}
           <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
             <ProductFilterSidebar
               isOpenFilter={openFilter}
@@ -50,7 +67,6 @@ export default function Library() {
         </Stack>
 
         <ProductList products={PRODUCTS} />
-        <ProductCartWidget />
       </Container>
     </Page>
   );
