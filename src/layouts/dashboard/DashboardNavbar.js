@@ -10,6 +10,7 @@ import AccountPopover from './AccountPopover';
 import ThemeToggle from './ThemeToggle';
 import NotificationsPopover from './NotificationsPopover';
 import { ThemeModeContext } from '../../contexts/useThemes';
+import { getBooksData } from '../../firebase/services';
 
 // ----------------------------------------------------------------------
 
@@ -42,7 +43,8 @@ DashboardNavbar.propTypes = {
 };
 
 export default function DashboardNavbar({ onOpenSidebar }) {
-
+  // const booksCollection = getBooksData();
+  // console.log('bookCollection', booksCollection);
   return (
     <RootStyle>
       <ToolbarStyle>

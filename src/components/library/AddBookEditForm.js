@@ -20,6 +20,7 @@ import {
   RHFRadioGroup,
   RHFUploadMultiFile,
 } from '../hook-form';
+import { addBook } from '../../firebase/services';
 
 // ----------------------------------------------------------------------
 
@@ -49,11 +50,12 @@ export default function AddBookEditForm({ isEdit, currentBook }) {
   const NewProductSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     description: Yup.string().required('Description is required'),
-    images: Yup.array().min(1, 'Images is required'),
+    images: Yup.array(),
     price: Yup.number().moreThan(0, 'Price should not be $0.00'),
     category: Yup.string().required('Category is required'),
     code: Yup.number().required('Book Code is required'),
   });
+  // .min(1, 'Images is required')
 
   const defaultValues = useMemo(
     () => ({
@@ -96,7 +98,8 @@ export default function AddBookEditForm({ isEdit, currentBook }) {
   }, [isEdit, currentBook]);
 
   const onSubmit = async (bookData) => {
-    console.log('bookData', bookData);
+    // console.log('bookData', bookData);
+    addBook(bookData);
   };
 
   const handleDrop = useCallback(

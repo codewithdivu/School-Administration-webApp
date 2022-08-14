@@ -53,9 +53,17 @@ export default function Library() {
             { name: 'Library', href: 'dashboard/library' },
           ]}
         />
-        <SearchBar />
+        <Grid container>
+          <Grid item>
+            <SearchBar />
+          </Grid>
+          <Grid item xs>
+            <Grid container direction="row-reverse">
+              <Grid item>{renderAddBookButton}</Grid>
+            </Grid>
+          </Grid>
+        </Grid>
         <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>
-          {renderAddBookButton}
           <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
             <ProductFilterSidebar
               isOpenFilter={openFilter}

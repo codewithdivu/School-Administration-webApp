@@ -1,6 +1,6 @@
 import { collection, getDocs, query, where, setDoc, doc, updateDoc, increment } from 'firebase/firestore';
 import { updateProfile } from 'firebase/auth';
-import { USERS } from './collections';
+import { BOOKS, USERS } from './collections';
 import { auth, db } from './config';
 
 // AUTH METHOD
@@ -58,6 +58,21 @@ export const getUserDataById = async () =>
       });
   });
 
+// it will return all the data of books
+export const getBooksData = async () =>
+  new Promise((resolve) => {
+    const querySnapshot = collection(db, BOOKS);
+    getDocs(querySnapshot)
+      .then((response) => {
+        response.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+          console.log(doc.id, ' => ', doc.data());
+        });
+      })
+      .catch(() => {
+        resolve(null);
+      });
+  });
 // add methods
 
 export const addUser = async (userData) =>
@@ -69,6 +84,22 @@ export const addUser = async (userData) =>
       createdBy: auth?.currentUser?.uid,
       createdAt: new Date(),
       id: documentReference.id,
+    })
+      .then(() => resolve(true))
+      .catch((error) => {
+        resolve(false);
+        // console.log('error', error);
+      });
+  });
+
+export const addBook = async (bookData) =>
+  new Promise((resolve) => {
+    // console.log('userData', userData);
+    const bookDocumentReference = doc(collection(db, BOOKS));
+    setDoc(bookDocumentReference, {
+      ...bookData,
+      createdAt: new Date(),
+      id: bookDocumentReference.id,
     })
       .then(() => resolve(true))
       .catch((error) => {
