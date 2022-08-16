@@ -15,3 +15,9 @@ export const uploadFile = async (file, path) =>
       })
       .catch(() => resolve(false));
   });
+
+
+
+  // DELETE 
+
+// export const deleteFile = async ()

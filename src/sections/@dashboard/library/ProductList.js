@@ -2,9 +2,11 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 // material
 import { Grid } from '@mui/material';
-import ShopProductCard from './ProductCard';
 import { SectionLoader } from '../../../components/sectionLoader';
+import ShopProductCard from './ProductCard';
 import PdfViewer from '../../../components/pdf-viewer';
+import { deleteBook } from '../../../firebase/services';
+import { BOOKS } from '../../../firebase/collections';
 
 // ----------------------------------------------------------------------
 
@@ -30,6 +32,17 @@ export default function ProductList({ products, isLoading, ...other }) {
     setIsBookViewOpen(false);
     setBookFile(null);
   };
+
+  const handleDeleteBook = async (bookId) => {
+    // eslint-disable-next-line no-useless-return
+    if (!bookId) return;
+    try {
+      const isBookDeleted = await deleteBook(BOOKS, bookId);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Grid container spacing={3} {...other}>
       {isLoading ? (
@@ -39,7 +52,7 @@ export default function ProductList({ products, isLoading, ...other }) {
         products.length > 0 &&
         products.map((product) => (
           <Grid key={product.id} item xs={12} sm={6} md={3}>
-            <ShopProductCard handleViewBook={handleViewBook} product={product} />
+            <ShopProductCard handleViewBook={handleViewBook} handleDeleteBook={handleDeleteBook} product={product} />
           </Grid>
         ))
       )}

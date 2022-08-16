@@ -4,6 +4,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Box, Card, Link, Typography, Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // utils
+import { LoadingButton } from '@mui/lab';
 import { fCurrency } from '../../../utils/formatNumber';
 // components
 import Label from '../../../components/Label';
@@ -24,9 +25,10 @@ const ProductImgStyle = styled('img')({
 ShopProductCard.propTypes = {
   product: PropTypes.object,
   handleViewBook: PropTypes.func,
+  handleDeleteBook: PropTypes.func,
 };
 
-export default function ShopProductCard({ product, handleViewBook }) {
+export default function ShopProductCard({ product, handleViewBook, handleDeleteBook }) {
   console.log('product', product);
   const { name, price, status, imageUrl } = product;
   return (
@@ -73,6 +75,9 @@ export default function ShopProductCard({ product, handleViewBook }) {
             &nbsp;
             {fCurrency(price)}
           </Typography>
+          <LoadingButton variant="contained" size="small" onClick={() => handleDeleteBook(product.id)}>
+            Delete
+          </LoadingButton>
         </Stack>
       </Stack>
     </Card>

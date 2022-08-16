@@ -1,4 +1,4 @@
-import { collection, getDocs, query, where, setDoc, doc, updateDoc, increment } from 'firebase/firestore';
+import { collection, getDocs, query, where, setDoc, doc, updateDoc, increment, deleteDoc } from 'firebase/firestore';
 import { updateProfile } from 'firebase/auth';
 import { BOOKS, USERS } from './collections';
 import { auth, db } from './config';
@@ -119,3 +119,10 @@ export const updateUser = async (updatedUserData) =>
   });
 
 // delete methods
+
+export const deleteBook = async (collectionName, documentId) =>
+  new Promise((resolve) => {
+    deleteDoc(doc(db, collectionName, documentId))
+      .then(() => resolve(true))
+      .catch(() => resolve(false));
+  });
