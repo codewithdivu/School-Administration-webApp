@@ -3,28 +3,19 @@ import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { useCallback, useEffect, useMemo } from 'react';
 // form
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { styled } from '@mui/material/styles';
 import { LoadingButton } from '@mui/lab';
-import { Card, Chip, Grid, Stack, TextField, Typography, Autocomplete, InputAdornment } from '@mui/material';
+import { Card, Grid, Stack, Typography, InputAdornment } from '@mui/material';
 // routes
 // components
-import {
-  FormProvider,
-  RHFSwitch,
-  RHFSelect,
-  RHFEditor,
-  RHFTextField,
-  RHFRadioGroup,
-  RHFUploadMultiFile,
-} from '../hook-form';
+import { FormProvider, RHFSelect, RHFTextField, RHFUploadMultiFile } from '../hook-form';
 import { addBook } from '../../firebase/services';
+import { uploadFile } from '../../firebase/storage';
 
 // ----------------------------------------------------------------------
-
-const GENDER_OPTION = ['Men', 'Women', 'Kids'];
 
 const CATEGORY_OPTION = [
   { group: 'Standard', classify: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
@@ -51,6 +42,7 @@ export default function AddBookEditForm({ isEdit, currentBook }) {
     name: Yup.string().required('Name is required'),
     description: Yup.string().required('Description is required'),
     images: Yup.array(),
+    bookFile: Yup.array(),
     price: Yup.number().moreThan(0, 'Price should not be $0.00'),
     category: Yup.string().required('Category is required'),
     code: Yup.number().required('Book Code is required'),
@@ -62,6 +54,7 @@ export default function AddBookEditForm({ isEdit, currentBook }) {
       name: currentBook?.name || '',
       description: currentBook?.description || '',
       images: currentBook?.images || [],
+      bookFile: currentBook?.bookFile || [],
       code: currentBook?.code || '',
       price: currentBook?.price || 0,
       category: currentBook?.category || CATEGORY_OPTION[0].classify[1],
@@ -78,7 +71,7 @@ export default function AddBookEditForm({ isEdit, currentBook }) {
   const {
     reset,
     watch,
-    control,
+
     setValue,
     getValues,
     handleSubmit,
@@ -97,9 +90,18 @@ export default function AddBookEditForm({ isEdit, currentBook }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, currentBook]);
 
-  const onSubmit = async (bookData) => {
+  const onSubmit = async ({ images, bookFile, ...bookData }) => {
     // console.log('bookData', bookData);
-    addBook(bookData);
+    try {
+      const bookUrl = await uploadFile(bookFile[0], `documents/${bookFile[0].name}`);
+      const imageUrl = await uploadFile(images[0], `images/${images[0].name}`);
+      // console.log('bookUrl', bookUrl);
+      // console.log('imagesUrl', imageUrl);
+      await addBook({ ...bookData, bookUrl, imageUrl });
+      navigate('/dashboard/library');
+    } catch (error) {
+      console.log('there is error');
+    }
   };
 
   const handleDrop = useCallback(
@@ -124,6 +126,28 @@ export default function AddBookEditForm({ isEdit, currentBook }) {
     const filteredItems = values.images?.filter((_file) => _file !== file);
     setValue('images', filteredItems);
   };
+  const handleDropBookFile = useCallback(
+    (acceptedFiles) => {
+      setValue(
+        'bookFile',
+        acceptedFiles.map((file) =>
+          Object.assign(file, {
+            preview: URL.createObjectURL(file),
+          })
+        )
+      );
+    },
+    [setValue]
+  );
+
+  const handleRemoveAllBookFile = () => {
+    setValue('bookFile', []);
+  };
+
+  const handleRemoveBookFile = (file) => {
+    const filteredItems = values.bookFile?.filter((_file) => _file !== file);
+    setValue('bookFile', filteredItems);
+  };
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -144,6 +168,18 @@ export default function AddBookEditForm({ isEdit, currentBook }) {
                   onDrop={handleDrop}
                   onRemove={handleRemove}
                   onRemoveAll={handleRemoveAll}
+                />
+              </div>
+              <div>
+                <LabelStyle>Book</LabelStyle>
+                <RHFUploadMultiFile
+                  name="bookFile"
+                  showPreview
+                  accept="application/pdf"
+                  maxSize={3145728}
+                  onDrop={handleDropBookFile}
+                  onRemove={handleRemoveBookFile}
+                  onRemoveAll={handleRemoveAllBookFile}
                 />
               </div>
             </Stack>

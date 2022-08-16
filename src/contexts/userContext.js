@@ -9,6 +9,7 @@ export const UserProfileProvider = ({ children }) => {
 
   useEffect(() => {
     if (userLocalProfileData) setUserProfile(JSON.parse(userLocalProfileData));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <UserProfileContext.Provider value={{ userProfile, setUserProfile }}>{children}</UserProfileContext.Provider>;

@@ -1,5 +1,4 @@
 import { sendEmailVerification, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
-import { useContext } from 'react';
 
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
@@ -16,7 +15,6 @@ import AuthSocial from '../sections/auth/AuthSocial';
 
 import { auth, provider } from '../firebase/config';
 import { addUser, getUserData } from '../firebase/services';
-import { UserProfileContext } from '../contexts/userContext';
 import config from '../config';
 
 // ----------------------------------------------------------------------

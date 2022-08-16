@@ -11,7 +11,7 @@ import { countries } from '../../../_mock/_countries';
 // components
 import { FormProvider, RHFSelect, RHFTextField, RHFUploadAvatar, RHFDatePicker } from '../../hook-form';
 import useAuthenticateUser from '../../../hooks/useAuthenticateUser';
-import { updateAuth, updateUser } from '../../../firebase/services';
+import { updateAuth } from '../../../firebase/services';
 import useUserProfile from '../../../hooks/useUserProfile';
 import Loader from '../../Loader';
 import { genderItems } from '../../../constants/metadata';
@@ -99,7 +99,7 @@ const PersonalAccount = () => {
     }
 
     try {
-      const isDataUpdated = await updateUser({ ...rest, id: userProfileData.id });
+      // const isDataUpdated = await updateUser({ ...rest, id: userProfileData.id });
       // console.log('isUpdated', isDataUpdated);
       setIsUserAdding(false);
     } catch (error) {

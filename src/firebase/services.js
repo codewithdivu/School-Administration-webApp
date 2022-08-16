@@ -86,7 +86,7 @@ export const addUser = async (userData) =>
       id: documentReference.id,
     })
       .then(() => resolve(true))
-      .catch((error) => {
+      .catch(() => {
         resolve(false);
         // console.log('error', error);
       });
@@ -99,10 +99,11 @@ export const addBook = async (bookData) =>
     setDoc(bookDocumentReference, {
       ...bookData,
       createdAt: new Date(),
+      createdBy: auth?.currentUser?.uid,
       id: bookDocumentReference.id,
     })
       .then(() => resolve(true))
-      .catch((error) => {
+      .catch(() => {
         resolve(false);
         // console.log('error', error);
       });

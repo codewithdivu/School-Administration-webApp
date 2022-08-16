@@ -53,7 +53,7 @@ export default function RegisterForm() {
           }
         }
       })
-      .catch((error) => {
+      .catch(() => {
         // console.log('error', error);
       });
   };

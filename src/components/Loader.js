@@ -14,4 +14,6 @@ Loader.propTypes = {
   isLoading: PropTypes.bool.isRequired,
 };
 
+// export const SectionLoader = ({ isLoading = false }) => <CircularProgress color="primary" />;
+
 export default Loader;

@@ -17,7 +17,7 @@ ThemeProvider.propTypes = {
 };
 
 export default function ThemeProvider({ children }) {
-  const { themeMode, setthemeMode } = useContext(ThemeModeContext);
+  const { themeMode } = useContext(ThemeModeContext);
 
   // console.log('palette', palette);
   const themeOptions = useMemo(

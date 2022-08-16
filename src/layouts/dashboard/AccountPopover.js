@@ -37,7 +37,7 @@ const MENU_OPTIONS = [
 
 export default function AccountPopover() {
   const anchorRef = useRef(null);
-  const { userProfile, setUserProfile } = useContext(UserProfileContext);
+  const { userProfile } = useContext(UserProfileContext);
   // console.log('userPeo',userProfile)
   const [open, setOpen] = useState(null);
 

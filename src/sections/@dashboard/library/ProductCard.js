@@ -7,7 +7,7 @@ import { styled } from '@mui/material/styles';
 import { fCurrency } from '../../../utils/formatNumber';
 // components
 import Label from '../../../components/Label';
-import { ColorPreview } from '../../../components/color-utils';
+// import { ColorPreview } from '../../../components/color-utils';
 
 // ----------------------------------------------------------------------
 
@@ -23,13 +23,14 @@ const ProductImgStyle = styled('img')({
 
 ShopProductCard.propTypes = {
   product: PropTypes.object,
+  handleViewBook: PropTypes.func,
 };
 
-export default function ShopProductCard({ product }) {
-  const { name, cover, price, colors, status, priceSale } = product;
-
+export default function ShopProductCard({ product, handleViewBook }) {
+  console.log('product', product);
+  const { name, price, status, imageUrl } = product;
   return (
-    <Card>
+    <Card onClick={() => handleViewBook(product)}>
       <Box sx={{ pt: '100%', position: 'relative' }}>
         {status && (
           <Label
@@ -46,7 +47,7 @@ export default function ShopProductCard({ product }) {
             {status}
           </Label>
         )}
-        <ProductImgStyle alt={name} src={cover} />
+        <ProductImgStyle alt={name} src={imageUrl} />
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
@@ -57,7 +58,7 @@ export default function ShopProductCard({ product }) {
         </Link>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <ColorPreview colors={colors} />
+          {/* <ColorPreview colors={code} /> */}
           <Typography variant="subtitle1">
             <Typography
               component="span"
@@ -67,7 +68,7 @@ export default function ShopProductCard({ product }) {
                 textDecoration: 'line-through',
               }}
             >
-              {priceSale && fCurrency(priceSale)}
+              {price && fCurrency(price)}
             </Typography>
             &nbsp;
             {fCurrency(price)}

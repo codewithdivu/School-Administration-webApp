@@ -9,8 +9,6 @@ import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
 import ThemeToggle from './ThemeToggle';
 import NotificationsPopover from './NotificationsPopover';
-import { ThemeModeContext } from '../../contexts/useThemes';
-import { getBooksData } from '../../firebase/services';
 
 // ----------------------------------------------------------------------
 

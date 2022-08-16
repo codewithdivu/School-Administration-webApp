@@ -1,16 +1,16 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // material
-import { Container, Grid, Stack, Typography } from '@mui/material';
+import { Container, Grid, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // components
 import Page from '../../components/Page';
-import { ProductSort, ProductList, ProductCartWidget, ProductFilterSidebar } from '../../sections/@dashboard/library';
+import { ProductSort, ProductList, ProductFilterSidebar } from '../../sections/@dashboard/library';
 // mock
-import PRODUCTS from '../../_mock/products';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import { UserProfileProvider } from '../../contexts/userContext';
 import SearchBar from '../../components/SearchBar';
+import useListener from '../../hooks/useListner';
+import { BOOKS } from '../../firebase/collections';
 
 // ----------------------------------------------------------------------
 
@@ -34,14 +34,14 @@ export default function Library() {
     navigate('/dashboard/library/addBook');
   };
 
-  const renderAddBookButton =
-    userProfile.role === 29 ? (
-      <LoadingButton variant="contained" size="large" onClick={navigateAddBook}>
-        Add Books
-      </LoadingButton>
-    ) : (
-      <h1>hello</h1>
-    );
+  const renderAddBookButton = userProfile?.role === 29 && (
+    <LoadingButton variant="contained" size="large" onClick={navigateAddBook}>
+      Add Book
+    </LoadingButton>
+  );
+
+  const { listenerData, isLoading } = useListener(BOOKS);
+  // console.log('allBooksData', listenerData);
 
   return (
     <Page title="Dashboard: Library">
@@ -74,7 +74,7 @@ export default function Library() {
           </Stack>
         </Stack>
 
-        <ProductList products={PRODUCTS} />
+        <ProductList isLoading={isLoading} products={listenerData} />
       </Container>
     </Page>
   );

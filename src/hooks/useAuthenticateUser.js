@@ -31,6 +31,7 @@ const useAuthenticateUser = () => {
     });
 
     return subscription;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return { user, isLoader };

@@ -20,7 +20,7 @@ export default function AppTasks({ title, subheader, list, ...other }) {
     initialValues: {
       checked: [list[2].id],
     },
-    onSubmit: (values) => {
+    onSubmit: () => {
       // console.log(values);
     },
   });
