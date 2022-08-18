@@ -12,8 +12,9 @@ import { Card, Grid, Stack, Typography, InputAdornment } from '@mui/material';
 // routes
 // components
 import { FormProvider, RHFSelect, RHFTextField, RHFUploadMultiFile } from '../hook-form';
-import { addBook } from '../../firebase/services';
+import { addBook, updateItem } from '../../firebase/services';
 import { uploadFile } from '../../firebase/storage';
+import { BOOKS } from '../../firebase/collections';
 
 // ----------------------------------------------------------------------
 
@@ -93,14 +94,17 @@ export default function AddBookEditForm({ isEdit, currentBook }) {
   const onSubmit = async ({ images, bookFile, ...bookData }) => {
     // console.log('bookData', bookData);
     try {
-      const bookUrl = await uploadFile(bookFile[0], `documents/${bookFile[0].name}`);
-      const imageUrl = await uploadFile(images[0], `images/${images[0].name}`);
+      const bookUrl = await uploadFile(bookFile[0], `documents/${bookFile[0]?.name}`);
+      const imageUrl = await uploadFile(images[0], `images/${images[0]?.name}`);
       // console.log('bookUrl', bookUrl);
       // console.log('imagesUrl', imageUrl);
-      await addBook({ ...bookData, bookUrl, imageUrl });
+      if (isEdit) {
+        await updateItem(BOOKS, currentBook.id, bookData);
+      } else await addBook({ ...bookData, bookUrl, imageUrl });
+
       navigate('/dashboard/library');
     } catch (error) {
-      console.log('there is error');
+      console.log('there is error', error);
     }
   };
 

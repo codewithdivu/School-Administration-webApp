@@ -6,7 +6,8 @@ export const getSidebarMenus = (items, role) => {
       return items.filter((item) => userAccessibleRoutes[role].includes(item.id));
     case 29:
       return items.filter((item) => userAccessibleRoutes[role].includes(item.id));
-
+    case 45:
+      return items.filter((item) => userAccessibleRoutes[role].includes(item.id));
     default:
       return items;
   }

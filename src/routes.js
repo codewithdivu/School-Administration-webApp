@@ -18,6 +18,7 @@ import Register from './pages/Register';
 import { UserProfileContext } from './contexts/userContext';
 import useUserProfile from './hooks/useUserProfile';
 import AddBook from './pages/Library/AddBook';
+import EditBook from './pages/Library/EditBook';
 
 // ----------------------------------------------------------------------
 
@@ -67,6 +68,22 @@ export default function Router() {
     },
     ...publicRoutes,
   ];
+  const teacherRoutes = [
+    {
+      path: '/dashboard',
+      element: user ? <DashboardLayout /> : <Navigate to="/login" />,
+      children: [
+        { path: 'app', element: <DashboardApp /> },
+        { path: 'user', element: <User /> },
+        { path: 'library', element: <Library /> },
+        { path: 'blog', element: <Blog /> },
+        { path: 'account', element: <AccountGeneral /> },
+        { path: 'profile', element: <Profile /> },
+        notFoundRoute,
+      ],
+    },
+    ...publicRoutes,
+  ];
   const librarianRoutes = [
     {
       path: '/dashboard',
@@ -76,6 +93,7 @@ export default function Router() {
         // { path: 'user', element: <User /> },
         { path: 'library', element: <Library /> },
         { path: 'library/addBook', element: <AddBook /> },
+        { path: 'library/editBook/:bookId', element: <EditBook /> },
         // { path: 'blog', element: <Blog /> },
         { path: 'account', element: <AccountGeneral /> },
         { path: 'profile', element: <Profile /> },
@@ -91,6 +109,8 @@ export default function Router() {
         return studentRoutes;
       case 29:
         return librarianRoutes;
+      case 45:
+        return teacherRoutes;
       default:
         return studentRoutes;
     }

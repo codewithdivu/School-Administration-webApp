@@ -59,20 +59,26 @@ export const getUserDataById = async () =>
   });
 
 // it will return all the data of books
-export const getBooksData = async () =>
+export const getBooksData = async (bookId = null) =>
   new Promise((resolve) => {
-    const querySnapshot = collection(db, BOOKS);
-    getDocs(querySnapshot)
+    const getBookQuery = query(collection(db, BOOKS), where('id', '==', bookId));
+    getDocs(getBookQuery)
       .then((response) => {
-        response.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
-          console.log(doc.id, ' => ', doc.data());
+        const arr = [];
+        response.docs.forEach((doc) => {
+          arr.push({
+            ...doc.data(),
+            id: doc.id,
+          });
         });
+        if (arr.length > 0) resolve(arr[0]);
+        else resolve(null);
       })
       .catch(() => {
         resolve(null);
       });
   });
+
 // add methods
 
 export const addUser = async (userData) =>
@@ -114,6 +120,13 @@ export const addBook = async (bookData) =>
 export const updateUser = async (updatedUserData) =>
   new Promise((resolve) => {
     updateDoc(doc(db, USERS, updatedUserData.id), { ...updatedUserData, updatedAt: new Date(), updates: increment(1) })
+      .then(() => resolve(true))
+      .catch(() => resolve(false));
+  });
+
+export const updateItem = async (collectionName, documentId, updatedData) =>
+  new Promise((resolve) => {
+    updateDoc(doc(db, collectionName, documentId), { ...updatedData, updatedAt: new Date(), update: increment(1) })
       .then(() => resolve(true))
       .catch(() => resolve(false));
   });

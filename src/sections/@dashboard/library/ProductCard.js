@@ -28,27 +28,38 @@ ShopProductCard.propTypes = {
   handleDeleteBook: PropTypes.func,
 };
 
-export default function ShopProductCard({ product, handleViewBook, handleDeleteBook }) {
-  console.log('product', product);
-  const { name, price, status, imageUrl } = product;
+export default function ShopProductCard({ product, handleViewBook, handleDeleteBook, handleEditBook }) {
+  const userProfile = JSON.parse(localStorage.getItem('userProfileData'));
+
+  const renderDeleteBookButton = userProfile?.role === 29 && (
+    <LoadingButton variant="contained" size="small" onClick={() => handleDeleteBook(product.id)}>
+      Delete
+    </LoadingButton>
+  );
+
+  const renderEditBookLabel = userProfile?.role === 29 && (
+    <LoadingButton variant="contained" size="small" onClick={() => handleEditBook(product.id)}>
+      Edit
+    </LoadingButton>
+    // <Label
+    //   variant="filled"
+    //   sx={{
+    //     zIndex: 9,
+    //     top: 16,
+    //     right: 16,
+    //     position: 'absolute',
+    //   }}
+    // >
+    //   Edit
+    // </Label>
+  );
+
+  const { name, price, imageUrl } = product;
   return (
-    <Card onClick={() => handleViewBook(product)}>
+    // onClick={() => handleViewBook(product)}
+    <Card style={{ cursor: 'pointer' }}>
       <Box sx={{ pt: '100%', position: 'relative' }}>
-        {status && (
-          <Label
-            variant="filled"
-            color={(status === 'sale' && 'error') || 'info'}
-            sx={{
-              zIndex: 9,
-              top: 16,
-              right: 16,
-              position: 'absolute',
-              textTransform: 'uppercase',
-            }}
-          >
-            {status}
-          </Label>
-        )}
+        {/* {renderEditBookLabel} */}
         <ProductImgStyle alt={name} src={imageUrl} />
       </Box>
 
@@ -75,9 +86,8 @@ export default function ShopProductCard({ product, handleViewBook, handleDeleteB
             &nbsp;
             {fCurrency(price)}
           </Typography>
-          <LoadingButton variant="contained" size="small" onClick={() => handleDeleteBook(product.id)}>
-            Delete
-          </LoadingButton>
+          {renderEditBookLabel}
+          {renderDeleteBookButton}
         </Stack>
       </Stack>
     </Card>

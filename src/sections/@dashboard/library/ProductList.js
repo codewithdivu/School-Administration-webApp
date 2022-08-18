@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 // material
 import { Grid } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { SectionLoader } from '../../../components/sectionLoader';
 import ShopProductCard from './ProductCard';
 import PdfViewer from '../../../components/pdf-viewer';
@@ -16,17 +18,24 @@ ProductList.propTypes = {
 };
 
 export default function ProductList({ products, isLoading, ...other }) {
+  const navigate = useNavigate();
+
   const [isBookViewOpen, setIsBookViewOpen] = useState(false);
   const [bookFile, setBookFile] = useState(null);
 
   const handleViewBook = async (book) => {
     if (!book?.bookUrl) return;
-    await fetch(book?.bookUrl, { headers: new Headers({ 'Access-Control-Allow-Origin': '*' }) }).then((response) => {
-      response.blob().then((blob) => {
-        setBookFile(blob);
-        setIsBookViewOpen(true);
-      });
-    });
+    await axios
+      .get(book?.bookUrl, {
+        headers: { 'Access-Control-Allow-Origin': '*' },
+      })
+      .then((response) => {
+        response.blob().then((blob) => {
+          setBookFile(blob);
+          setIsBookViewOpen(true);
+        });
+      })
+      .catch((error) => console.log(error));
   };
   const handleCloseBookView = () => {
     setIsBookViewOpen(false);
@@ -43,6 +52,11 @@ export default function ProductList({ products, isLoading, ...other }) {
     }
   };
 
+  const handleEditBook = (bookId) => {
+    // console.log('edited....', bookId);
+    navigate(`/dashboard/library/editBook/${bookId}`);
+  };
+
   return (
     <Grid container spacing={3} {...other}>
       {isLoading ? (
@@ -52,7 +66,12 @@ export default function ProductList({ products, isLoading, ...other }) {
         products.length > 0 &&
         products.map((product) => (
           <Grid key={product.id} item xs={12} sm={6} md={3}>
-            <ShopProductCard handleViewBook={handleViewBook} handleDeleteBook={handleDeleteBook} product={product} />
+            <ShopProductCard
+              handleViewBook={handleViewBook}
+              handleDeleteBook={handleDeleteBook}
+              handleEditBook={handleEditBook}
+              product={product}
+            />
           </Grid>
         ))
       )}

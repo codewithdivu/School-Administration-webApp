@@ -6,4 +6,5 @@ export const regex = {
 export const userAccessibleRoutes = {
   13: [11, 12, 13, 14, 15],
   29: [11, 12, 14],
+  45: [11, 12, 13, 14, 15],
 };
