@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { faker } from '@faker-js/faker';
 // @mui
 import { useTheme } from '@mui/material/styles';
@@ -18,11 +19,19 @@ import {
   AppConversionRates,
 } from '../sections/@dashboard/app';
 import useAuthenticateUser from '../hooks/useAuthenticateUser';
+import useListenerStudentsData from '../hooks/useListnerStudentsData';
+import { BOOKS, USERS } from '../firebase/collections';
+import useListener from '../hooks/useListner';
+import AppWelcome from '../sections/@dashboard/app/AppWelcome';
+import AppFeatured from '../sections/@dashboard/app/AppFeatured';
 
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
   const theme = useTheme();
+
+  const { listenerStudentsData } = useListenerStudentsData(USERS);
+  const { listenerData } = useListener(BOOKS);
 
   const { user } = useAuthenticateUser();
 
@@ -33,13 +42,34 @@ export default function DashboardApp() {
           {`Hi ${user.displayName}, Welcome back!`}
         </Typography>
 
+        {/* <Grid container spacing={3}> */}
+        {/* </Grid> */}
+
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Weekly Sales" total={714000} icon={'ant-design:android-filled'} />
+          
+          <Grid item xs={12} md={8}>
+            <AppWelcome />
+          </Grid>
+
+          <Grid item xs={12} md={4}>
+            <AppFeatured />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="New Users" total={1352831} color="info" icon={'ant-design:apple-filled'} />
+            <AppWidgetSummary
+              title="Students"
+              total={listenerStudentsData?.length || 234}
+              icon={'ant-design:user-outlined'}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={3}>
+            <AppWidgetSummary
+              title="Books"
+              total={listenerData?.length || 353}
+              color="info"
+              icon={'ant-design:book-outlined'}
+            />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
@@ -94,10 +124,10 @@ export default function DashboardApp() {
             <AppCurrentVisits
               title="Current Visits"
               chartData={[
-                { label: 'America', value: 4344 },
-                { label: 'Asia', value: 5435 },
-                { label: 'Europe', value: 1443 },
-                { label: 'Africa', value: 4443 },
+                { label: 'Students', value: 1452 },
+                { label: 'Books', value: 4568 },
+                { label: 'Europe', value: 6742 },
+                { label: 'Africa', value: 2048 },
               ]}
               chartColors={[
                 theme.palette.primary.main,
