@@ -19,6 +19,7 @@ import { UserProfileContext } from './contexts/userContext';
 import useUserProfile from './hooks/useUserProfile';
 import AddBook from './pages/Library/AddBook';
 import EditBook from './pages/Library/EditBook';
+import BlogNewPost from './pages/Blog/createBlog';
 
 // ----------------------------------------------------------------------
 
@@ -77,6 +78,7 @@ export default function Router() {
         { path: 'user', element: <User /> },
         { path: 'library', element: <Library /> },
         { path: 'blog', element: <Blog /> },
+        { path: 'blog/newBlog', element: <BlogNewPost /> },
         { path: 'account', element: <AccountGeneral /> },
         { path: 'profile', element: <Profile /> },
         notFoundRoute,

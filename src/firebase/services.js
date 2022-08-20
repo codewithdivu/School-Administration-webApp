@@ -1,6 +1,6 @@
 import { collection, getDocs, query, where, setDoc, doc, updateDoc, increment, deleteDoc } from 'firebase/firestore';
 import { updateProfile } from 'firebase/auth';
-import { BOOKS, USERS } from './collections';
+import { BLOGS, BOOKS, USERS } from './collections';
 import { auth, db } from './config';
 
 // AUTH METHOD
@@ -112,6 +112,22 @@ export const addBook = async (bookData) =>
       .catch(() => {
         resolve(false);
         // console.log('error', error);
+      });
+  });
+
+export const addBlog = async (blogData) =>
+  new Promise((resolve) => {
+    const blogDocumentReference = doc(collection(db, BLOGS));
+    setDoc(blogDocumentReference, {
+      ...blogData,
+      createdAt: new Date(),
+      createdBy: auth?.currentUser?.uid,
+      id: blogDocumentReference.id,
+    })
+      .then(() => resolve(true))
+      .catch((error) => {
+        resolve(false);
+        console.log('error', error);
       });
   });
 

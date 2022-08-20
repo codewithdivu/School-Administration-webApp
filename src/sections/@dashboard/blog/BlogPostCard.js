@@ -58,7 +58,7 @@ BlogPostCard.propTypes = {
 };
 
 export default function BlogPostCard({ post, index }) {
-  const { cover, title, view, comment, share, author, createdAt } = post;
+  const { cover, title, view, comment, share, author, createdAt, imageUrl } = post;
   const latestPostLarge = index === 0;
   const latestPost = index === 1 || index === 2;
 
@@ -69,11 +69,11 @@ export default function BlogPostCard({ post, index }) {
   ];
 
   return (
-    <Grid item xs={12} sm={latestPostLarge ? 12 : 6} md={latestPostLarge ? 6 : 3}>
+    <Grid item xs={12} sm={12} md={6}>
       <Card sx={{ position: 'relative' }}>
         <CardMediaStyle
           sx={{
-            ...((latestPostLarge || latestPost) && {
+            ...{
               pt: 'calc(100% * 4 / 3)',
               '&:after': {
                 top: 0,
@@ -83,13 +83,13 @@ export default function BlogPostCard({ post, index }) {
                 position: 'absolute',
                 bgcolor: (theme) => alpha(theme.palette.grey[900], 0.72),
               },
-            }),
-            ...(latestPostLarge && {
+            },
+            ...{
               pt: {
                 xs: 'calc(100% * 4 / 3)',
                 sm: 'calc(100% * 3 / 4.66)',
               },
-            }),
+            },
           }}
         >
           <SvgIconStyle
@@ -102,38 +102,38 @@ export default function BlogPostCard({ post, index }) {
               bottom: -15,
               position: 'absolute',
               color: 'background.paper',
-              ...((latestPostLarge || latestPost) && { display: 'none' }),
+              ...{ display: 'none' },
             }}
           />
-          <AvatarStyle
+          {/* <AvatarStyle
             alt={author.name}
             src={author.avatarUrl}
             sx={{
-              ...((latestPostLarge || latestPost) && {
+              ...{
                 zIndex: 9,
                 top: 24,
                 left: 24,
                 width: 40,
                 height: 40,
-              }),
+              },
             }}
-          />
+          /> */}
 
-          <CoverImgStyle alt={title} src={cover} />
+          <CoverImgStyle alt={title} src={imageUrl} />
         </CardMediaStyle>
 
         <CardContent
           sx={{
             pt: 4,
-            ...((latestPostLarge || latestPost) && {
+            ...{
               bottom: 0,
               width: '100%',
               position: 'absolute',
-            }),
+            },
           }}
         >
           <Typography gutterBottom variant="caption" sx={{ color: 'text.disabled', display: 'block' }}>
-            {fDate(createdAt)}
+            {fDate(createdAt?.toDate())}
           </Typography>
 
           <TitleStyle
@@ -143,10 +143,10 @@ export default function BlogPostCard({ post, index }) {
             underline="hover"
             component={RouterLink}
             sx={{
-              ...(latestPostLarge && { typography: 'h5', height: 60 }),
-              ...((latestPostLarge || latestPost) && {
+              ...{ typography: 'h5', height: 60 },
+              ...{
                 color: 'common.white',
-              }),
+              },
             }}
           >
             {title}
@@ -160,9 +160,9 @@ export default function BlogPostCard({ post, index }) {
                   display: 'flex',
                   alignItems: 'center',
                   ml: index === 0 ? 0 : 1.5,
-                  ...((latestPostLarge || latestPost) && {
+                  ...{
                     color: 'grey.500',
-                  }),
+                  },
                 }}
               >
                 <Iconify icon={info.icon} sx={{ width: 16, height: 16, mr: 0.5 }} />

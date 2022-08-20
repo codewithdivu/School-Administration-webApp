@@ -94,13 +94,14 @@ export default function AddBookEditForm({ isEdit, currentBook }) {
   const onSubmit = async ({ images, bookFile, ...bookData }) => {
     // console.log('bookData', bookData);
     try {
-      const bookUrl = await uploadFile(bookFile[0], `documents/${bookFile[0]?.name}`);
-      const imageUrl = await uploadFile(images[0], `images/${images[0]?.name}`);
+      const uniqueFileName = new Date().getTime();
+      const bookUrl = await uploadFile(bookFile[0], `documents/${uniqueFileName}`);
+      const imageUrl = await uploadFile(images[0], `images/${uniqueFileName}`);
       // console.log('bookUrl', bookUrl);
       // console.log('imagesUrl', imageUrl);
       if (isEdit) {
         await updateItem(BOOKS, currentBook.id, bookData);
-      } else await addBook({ ...bookData, bookUrl, imageUrl });
+      } else await addBook({ ...bookData, bookUrl, imageUrl, uniqueFileName });
 
       navigate('/dashboard/library');
     } catch (error) {

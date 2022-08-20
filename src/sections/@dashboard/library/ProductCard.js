@@ -36,6 +36,11 @@ export default function ShopProductCard({ product, handleViewBook, handleDeleteB
       Delete
     </LoadingButton>
   );
+  const renderView = userProfile?.role === 29 && (
+    <LoadingButton variant="contained" size="small" onClick={() => handleViewBook(product)}>
+      View
+    </LoadingButton>
+  );
 
   const renderEditBookLabel = userProfile?.role === 29 && (
     <LoadingButton variant="contained" size="small" onClick={() => handleEditBook(product.id)}>
@@ -88,6 +93,7 @@ export default function ShopProductCard({ product, handleViewBook, handleDeleteB
           </Typography>
           {renderEditBookLabel}
           {renderDeleteBookButton}
+          {renderView}
         </Stack>
       </Stack>
     </Card>
