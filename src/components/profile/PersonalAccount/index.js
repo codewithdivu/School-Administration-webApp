@@ -11,11 +11,13 @@ import { countries } from '../../../_mock/_countries';
 // components
 import { FormProvider, RHFSelect, RHFTextField, RHFUploadAvatar, RHFDatePicker } from '../../hook-form';
 import useAuthenticateUser from '../../../hooks/useAuthenticateUser';
-import { updateAuth } from '../../../firebase/services';
+import { updateAuth, updateUser } from '../../../firebase/services';
 import useUserProfile from '../../../hooks/useUserProfile';
 import Loader from '../../Loader';
 import { genderItems } from '../../../constants/metadata';
 import { regex } from '../../../constants/keywords';
+import { fData } from '../../../utils/formatNumber';
+import { uploadFile } from '../../../firebase/storage';
 
 // ................................................................................................................................
 
@@ -73,7 +75,7 @@ const PersonalAccount = () => {
       setValue('zipCode', userProfileData.zipCode);
       setValue('about', userProfileData.about);
       setValue('gender', userProfileData.gender);
-      setValue('birthDate', userProfileData.birthDate);
+      setValue('birthDate', userProfileData.birthDate?.toDate());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userProfileData]);
@@ -81,14 +83,21 @@ const PersonalAccount = () => {
   // METHODS
 
   const onSubmit = async (formData) => {
-    // console.log('formData', formData);
+    console.log('formData', formData);
 
     setIsUserAdding(true);
     const authUpdateData = {};
     // eslint-disable-next-line no-unused-vars
-    const { email, isPublic, ...rest } = formData;
+    const { email, isPublic, photoURL, ...rest } = formData;
+
+    const profilePic = await uploadFile(photoURL, `profilePicture/${userProfileData.createdBy}`);
+    // console.log('profilePic', profilePic);
+
     if (userProfileData.displayName !== formData.displayName) {
       authUpdateData.displayName = formData.displayName;
+    }
+    if (userProfileData.photoURL !== formData.photoURL.preview) {
+      authUpdateData.photoURL = profilePic;
     }
     if (userProfileData.phoneNumber !== formData.phoneNumber) {
       authUpdateData.phoneNumber = formData.phoneNumber;
@@ -99,7 +108,7 @@ const PersonalAccount = () => {
     }
 
     try {
-      // const isDataUpdated = await updateUser({ ...rest, id: userProfileData.id });
+      const isDataUpdated = await updateUser({ ...rest, id: userProfileData.id, photoURL: profilePic });
       // console.log('isUpdated', isDataUpdated);
       setIsUserAdding(false);
     } catch (error) {
@@ -149,7 +158,7 @@ const PersonalAccount = () => {
                   }}
                 >
                   Allowed *.jpeg, *.jpg, *.png, *.gif
-                  <br /> max size of 3MB
+                  <br /> max size of {fData(3145728)}
                 </Typography>
               }
             />

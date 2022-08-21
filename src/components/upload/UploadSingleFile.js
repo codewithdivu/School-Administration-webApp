@@ -4,9 +4,11 @@ import { useDropzone } from 'react-dropzone';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
 //
+import { isString } from 'lodash';
 // import Image from '../Image';
 import RejectionFiles from './RejectionFiles';
 import BlockContent from './BlockContent';
+import Image from '../Image';
 
 // ----------------------------------------------------------------------
 
@@ -56,7 +58,7 @@ export default function UploadSingleFile({ error = false, file, helperText, sx, 
         <input {...getInputProps()} />
 
         <BlockContent />
-{/* 
+
         {file && (
           <Image
             alt="file preview"
@@ -70,7 +72,7 @@ export default function UploadSingleFile({ error = false, file, helperText, sx, 
               height: 'calc(100% - 16px)',
             }}
           />
-        )} */}
+        )}
       </DropZoneStyle>
 
       {fileRejections.length > 0 && <RejectionFiles fileRejections={fileRejections} />}

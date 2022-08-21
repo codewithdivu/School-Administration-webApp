@@ -2,9 +2,10 @@ import { makeStyles } from '@mui/styles';
 
 export default makeStyles({
   container: {
-    width: '100%',
-    height: '100%',
-    fontFamily: 'Roboto',
+    // width: '100%',
+    // height: '100%',
+    // fontFamily: 'Roboto',
+    fontFamily: 'sans-serif',
     fontWeight: '200',
     background: 'rgba(0, 0, 0, 0.7)',
 
@@ -69,7 +70,7 @@ export default makeStyles({
       },
 
       '& .MuiIcon-root': {
-        width: '20px !important',
+        width: '200px !important',
       },
     },
   },

@@ -16,6 +16,7 @@ import AuthSocial from '../sections/auth/AuthSocial';
 import { auth, provider } from '../firebase/config';
 import { addUser, getUserData } from '../firebase/services';
 import config from '../config';
+import { appRoutes } from '../constants/appRoutes';
 
 // ----------------------------------------------------------------------
 
@@ -77,7 +78,7 @@ export default function Login() {
           if (!response) {
             await addUser({ ...user?.providerData[0] });
           }
-          navigate('/dashboard/app');
+          navigate(appRoutes.DASHBOARD_APP);
         }
       })
       .catch(() => {});
@@ -90,7 +91,7 @@ export default function Login() {
         const { user } = userCredential;
 
         if (user.emailVerified) {
-          navigate('/dashboard/app', { replace: true });
+          navigate(appRoutes.DASHBOARD_APP, { replace: true });
         } else {
           sendEmailVerification(auth.currentUser, { url: config.BASE_URL })
             .then(() => {

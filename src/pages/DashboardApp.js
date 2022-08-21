@@ -46,14 +46,13 @@ export default function DashboardApp() {
         {/* </Grid> */}
 
         <Grid container spacing={3}>
-          
-          <Grid item xs={12} md={8}>
+          {/* <Grid item xs={12} md={8}>
             <AppWelcome />
           </Grid>
 
           <Grid item xs={12} md={4}>
             <AppFeatured />
-          </Grid>
+          </Grid> */}
 
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary

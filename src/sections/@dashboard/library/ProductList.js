@@ -4,13 +4,14 @@ import { useState } from 'react';
 import { getBlob, ref } from 'firebase/storage';
 import { Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
 import { SectionLoader } from '../../../components/sectionLoader';
 import ShopProductCard from './ProductCard';
 import PdfViewer from '../../../components/pdf-viewer';
 import { deleteBook } from '../../../firebase/services';
 import { BOOKS } from '../../../firebase/collections';
 import { storage } from '../../../firebase/config';
+import { deleteFile, DOCUMENT_BUCKET, IMAGE_BUCKET } from '../../../firebase/storage';
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +30,13 @@ export default function ProductList({ products, isLoading, ...other }) {
     console.log('book', book);
     if (!book?.bookUrl) return;
     const downloadRef = ref(storage, `documents/${book.uniqueFileName}`);
-    await getBlob(downloadRef).then((blob) => console.log(blob));
+    await getBlob(downloadRef)
+      .then((blob) => {
+        setBookFile(blob);
+        setIsBookViewOpen(true);
+      })
+      .catch((error) => console.log('error', error));
+
     // await axios
     //   .get(book?.bookUrl, {
     //     headers: { 'Access-Control-Allow-Origin': '*' },
@@ -47,11 +54,16 @@ export default function ProductList({ products, isLoading, ...other }) {
     setBookFile(null);
   };
 
-  const handleDeleteBook = async (bookId) => {
+  const handleDeleteBook = async ({ id, uniqueFileName }) => {
     // eslint-disable-next-line no-useless-return
-    if (!bookId) return;
+    if (!id) return;
     try {
-      const isBookDeleted = await deleteBook(BOOKS, bookId);
+      const isBookDeleted = await deleteBook(BOOKS, id);
+      console.log('isBookDeleted', isBookDeleted);
+      if (isBookDeleted) {
+        await deleteFile(`${IMAGE_BUCKET}/${uniqueFileName}`);
+        await deleteFile(`${DOCUMENT_BUCKET}/${uniqueFileName}`);
+      }
     } catch (error) {
       console.log(error);
     }

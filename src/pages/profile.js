@@ -87,7 +87,7 @@ export default function UserProfile() {
           position: 'relative',
         }}
       >
-        <ProfileCover myProfile={'hello'} />
+        <ProfileCover myProfile="" />
 
         <TabsWrapperStyle>
           <Tabs

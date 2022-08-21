@@ -13,8 +13,9 @@ import { Card, Grid, Stack, Typography, InputAdornment } from '@mui/material';
 // components
 import { FormProvider, RHFSelect, RHFTextField, RHFUploadMultiFile } from '../hook-form';
 import { addBook, updateItem } from '../../firebase/services';
-import { uploadFile } from '../../firebase/storage';
+import { DOCUMENT_BUCKET, IMAGE_BUCKET, uploadFile } from '../../firebase/storage';
 import { BOOKS } from '../../firebase/collections';
+import { appRoutes } from '../../constants/appRoutes';
 
 // ----------------------------------------------------------------------
 
@@ -95,15 +96,15 @@ export default function AddBookEditForm({ isEdit, currentBook }) {
     // console.log('bookData', bookData);
     try {
       const uniqueFileName = new Date().getTime();
-      const bookUrl = await uploadFile(bookFile[0], `documents/${uniqueFileName}`);
-      const imageUrl = await uploadFile(images[0], `images/${uniqueFileName}`);
+      const bookUrl = await uploadFile(bookFile[0], `${DOCUMENT_BUCKET}/${uniqueFileName}`);
+      const imageUrl = await uploadFile(images[0], `${IMAGE_BUCKET}/${uniqueFileName}`);
       // console.log('bookUrl', bookUrl);
       // console.log('imagesUrl', imageUrl);
       if (isEdit) {
         await updateItem(BOOKS, currentBook.id, bookData);
       } else await addBook({ ...bookData, bookUrl, imageUrl, uniqueFileName });
 
-      navigate('/dashboard/library');
+      navigate(appRoutes.DASHBOARD_LIBRARY);
     } catch (error) {
       console.log('there is error', error);
     }
@@ -168,8 +169,9 @@ export default function AddBookEditForm({ isEdit, currentBook }) {
                 <RHFUploadMultiFile
                   name="images"
                   showPreview
-                  accept="image/*"
-                  maxSize={3145728}
+                  // accept="image/*"
+                  accept={{ 'image/*': ['.jpeg', '.png'] }}
+                  maxSize={5242880}
                   onDrop={handleDrop}
                   onRemove={handleRemove}
                   onRemoveAll={handleRemoveAll}
@@ -180,8 +182,9 @@ export default function AddBookEditForm({ isEdit, currentBook }) {
                 <RHFUploadMultiFile
                   name="bookFile"
                   showPreview
-                  accept="application/pdf"
-                  maxSize={3145728}
+                  accept={{ 'application/pdf': ['.pdf'] }}
+                  // accept="application/pdf"
+                  maxSize={52428800}
                   onDrop={handleDropBookFile}
                   onRemove={handleRemoveBookFile}
                   onRemoveAll={handleRemoveAllBookFile}

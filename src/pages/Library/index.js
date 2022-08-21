@@ -11,6 +11,7 @@ import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import SearchBar from '../../components/SearchBar';
 import useListener from '../../hooks/useListner';
 import { BOOKS } from '../../firebase/collections';
+import { appRoutes } from '../../constants/appRoutes';
 
 // ----------------------------------------------------------------------
 
@@ -31,7 +32,7 @@ export default function Library() {
   };
 
   const navigateAddBook = () => {
-    navigate('/dashboard/library/addBook');
+    navigate(appRoutes.DASHBOARD_LIBRARY_ADD_BOOK);
   };
 
   const renderAddBookButton = userProfile?.role === 29 && (

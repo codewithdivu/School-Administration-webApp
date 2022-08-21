@@ -7,7 +7,7 @@ import { styled } from '@mui/material/styles';
 import { LoadingButton } from '@mui/lab';
 import { fCurrency } from '../../../utils/formatNumber';
 // components
-import Label from '../../../components/Label';
+// import Label from '../../../components/Label';
 // import { ColorPreview } from '../../../components/color-utils';
 
 // ----------------------------------------------------------------------
@@ -32,7 +32,7 @@ export default function ShopProductCard({ product, handleViewBook, handleDeleteB
   const userProfile = JSON.parse(localStorage.getItem('userProfileData'));
 
   const renderDeleteBookButton = userProfile?.role === 29 && (
-    <LoadingButton variant="contained" size="small" onClick={() => handleDeleteBook(product.id)}>
+    <LoadingButton variant="contained" size="small" onClick={() => handleDeleteBook(product)}>
       Delete
     </LoadingButton>
   );

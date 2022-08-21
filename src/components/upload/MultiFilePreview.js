@@ -7,7 +7,7 @@ import { List, Stack, Button, IconButton, ListItemText, ListItem } from '@mui/ma
 // utils
 import { fData } from '../../utils/formatNumber';
 //
-// import Image from '../Image';
+import Image from '../Image';
 import Iconify from '../Iconify';
 // import { varFade } from '../animate';
 
@@ -64,7 +64,7 @@ export default function MultiFilePreview({ showPreview = false, files, onRemove,
                     border: (theme) => `solid 1px ${theme.palette.divider}`,
                   }}
                 >
-                  {/* <Image alt="preview" src={isString(file) ? file : preview} ratio="1/1" /> */}
+                  <Image alt="preview" src={isString(file) ? file : file.preview} ratio="1/1" />
                   <IconButton
                     size="small"
                     onClick={() => onRemove(file)}
@@ -122,9 +122,9 @@ export default function MultiFilePreview({ showPreview = false, files, onRemove,
           <Button color="inherit" size="small" onClick={onRemoveAll}>
             Remove all
           </Button>
-          <Button size="small" variant="contained">
+          {/* <Button size="small" variant="contained">
             Upload files
-          </Button>
+          </Button> */}
         </Stack>
       )}
     </>

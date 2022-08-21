@@ -4,7 +4,8 @@ import { useDropzone } from 'react-dropzone';
 import { Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 //
-// import Image from '../Image';
+import { isString } from 'lodash';
+import Image from '../Image';
 import Iconify from '../Iconify';
 import RejectionFiles from './RejectionFiles';
 
@@ -87,7 +88,7 @@ export default function UploadAvatar({ error, file, helperText, sx, ...other }) 
         >
           <input {...getInputProps()} />
 
-          {/* {file && <Image alt="avatar" src={isString(file) ? file : file.preview} sx={{ zIndex: 8 }} />} */}
+          {file && <Image alt="avatar" src={isString(file) ? file : file.preview} sx={{ zIndex: 8 }} />}
 
           <PlaceholderStyle
             className="placeholder"

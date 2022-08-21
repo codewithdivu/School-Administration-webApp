@@ -12,6 +12,7 @@ import { roles } from '../../../constants/metadata';
 import { auth } from '../../../firebase/config';
 import { addUser, updateAuth } from '../../../firebase/services';
 import config from '../../../config';
+import { appRoutes } from '../../../constants/appRoutes';
 
 // ----------------------------------------------------------------------
 
@@ -46,7 +47,7 @@ export default function RegisterForm() {
                 .then(() => {
                   // eslint-disable-next-line no-alert
                   alert('we have sent you a verification link in your mail please...kindly verify it');
-                  navigate('/login', { replace: true });
+                  navigate(appRoutes.LOGIN, { replace: true });
                 })
                 .catch(() => {});
             }

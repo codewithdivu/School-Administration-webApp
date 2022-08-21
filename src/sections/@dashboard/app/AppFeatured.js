@@ -9,11 +9,12 @@ import { CardContent, Box, Card, Typography, Link } from '@mui/material';
 // _mock_
 // import { _appFeatured } from '../../../../_mock';
 // components
-import Image from '../../../components/upload/Image';
-import { MotionContainer, varFade } from '../../../components/animate';
+// import Image from '../../../../components/Image';
+// import { MotionContainer, varFade } from '../../../../components/an';
 import { CarouselDots, CarouselArrows } from '../../../components/animate/carousel';
-import useListener from '../../../hooks/useListner';
-import { BLOGS } from '../../../firebase/collections';
+import MotionContainer from '../../../components/animate/MotionContainer copy';
+import { varFade } from '../../../components/animate';
+import Image from '../../../components/Image';
 
 // ----------------------------------------------------------------------
 
@@ -30,12 +31,16 @@ const OverlayStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function AppFeatured() {
-  const { listenerData } = useListener(BLOGS);
-  console.log('blogsListenerData', listenerData);
+  const _appFeatured = [...Array(3)].map((_, index) => ({
+    id: 12,
+    title: ['Harry Potter and the Deathly Hallows - Part 2', 'Disney Zombies 2', 'Lightroom mobile - Koloro'][index],
+    description: 'hello bhia',
+    // image: ,
+  }));
 
   const theme = useTheme();
   const carouselRef = useRef(null);
-  const [currentIndex, setCurrentIndex] = useState(theme.direction === 'rtl' ? listenerData?.length - 1 : 0);
+  const [currentIndex, setCurrentIndex] = useState(theme.direction === 'rtl' ? _appFeatured.length - 1 : 0);
 
   const settings = {
     speed: 800,
@@ -65,7 +70,7 @@ export default function AppFeatured() {
   return (
     <Card>
       <Slider ref={carouselRef} {...settings}>
-        {listenerData?.map((app, index) => (
+        {_appFeatured.map((app, index) => (
           <CarouselItem key={app.id} item={app} isActive={index === currentIndex} />
         ))}
       </Slider>
@@ -97,15 +102,14 @@ export default function AppFeatured() {
 CarouselItem.propTypes = {
   isActive: PropTypes.bool,
   item: PropTypes.shape({
-    imageUrl: PropTypes.string,
-    title: PropTypes.string,
     description: PropTypes.string,
+    image: PropTypes.string,
+    title: PropTypes.string,
   }),
 };
 
 function CarouselItem({ item, isActive }) {
-  const { imageUrl, title, description } = item;
-  // console.log('itemBlog', item);
+  const { image, title, description } = item;
 
   return (
     <Box sx={{ position: 'relative' }}>
@@ -122,26 +126,26 @@ function CarouselItem({ item, isActive }) {
           color: 'common.white',
         }}
       >
-        {/* <m.div variants={varFade().inRight}> */}
-        <Typography variant="overline" component="div" sx={{ mb: 1, opacity: 0.48 }}>
-          Featured App
-        </Typography>
-        {/* </m.div> */}
-        {/* <m.div variants={varFade().inRight}> */}
-        <Link component={RouterLink} to="#" color="inherit" underline="none">
-          <Typography variant="h5" gutterBottom noWrap>
-            {title}
+        <m.div variants={varFade().inRight}>
+          <Typography variant="overline" component="div" sx={{ mb: 1, opacity: 0.48 }}>
+            Featured App
           </Typography>
-        </Link>
-        {/* </m.div> */}
-        {/* <m.div variants={varFade().inRight}> */}
-        <Typography variant="body2" noWrap>
-          {description}
-        </Typography>
-        {/* </m.div> */}
+        </m.div>
+        <m.div variants={varFade().inRight}>
+          <Link component={RouterLink} to="#" color="inherit" underline="none">
+            <Typography variant="h5" gutterBottom noWrap>
+              {title}
+            </Typography>
+          </Link>
+        </m.div>
+        <m.div variants={varFade().inRight}>
+          <Typography variant="body2" noWrap>
+            {description}
+          </Typography>
+        </m.div>
       </CardContent>
       <OverlayStyle />
-      <Image alt={title} src={imageUrl} sx={{ height: { xs: 28, xl: 32 } }} />
+      <Image alt={title} src={image} sx={{ height: { xs: 28, xl: 32 } }} />
     </Box>
   );
 }

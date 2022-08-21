@@ -11,11 +11,12 @@ import { styled } from '@mui/material/styles';
 import { Grid, Card, Chip, Stack, Button, TextField, Typography, Autocomplete } from '@mui/material';
 // routes
 // components
-import { RHFSwitch, RHFEditor, FormProvider, RHFTextField, RHFUploadSingleFile } from '../../components/hook-form';
+import { RHFSwitch,  FormProvider, RHFTextField, RHFUploadSingleFile } from '../../components/hook-form';
 //
 import BlogNewPostPreview from './BlogNewPostPreview';
-import { uploadFile } from '../../firebase/storage';
+import { IMAGE_BUCKET, uploadFile } from '../../firebase/storage';
 import { addBlog } from '../../firebase/services';
+import { appRoutes } from '../../constants/appRoutes';
 // ----------------------------------------------------------------------
 
 const TAGS_OPTION = [
@@ -84,7 +85,7 @@ export default function BlogNewPostForm() {
   });
 
   const {
-    reset,
+    // reset,
     watch,
     control,
     setValue,
@@ -100,13 +101,13 @@ export default function BlogNewPostForm() {
     try {
       const uniqueFileName = new Date().getTime();
       // console.log('uniqueFileName', uniqueFileName);
-      const imageUrl = await uploadFile(cover, `images/${uniqueFileName}`);
+      const imageUrl = await uploadFile(cover, `${IMAGE_BUCKET}/${uniqueFileName}`);
       // console.log('imageURL', imageUrl);
 
       const dataAddBlog = await addBlog({ ...blogData, imageUrl, uniqueFileName });
 
       if (dataAddBlog) {
-        navigate('/dashboard/blog');
+        navigate(appRoutes.DASHBOARD_BLOG);
       }
     } catch (error) {
       console.error(error);

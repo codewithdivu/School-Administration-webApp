@@ -20,6 +20,7 @@ import useUserProfile from './hooks/useUserProfile';
 import AddBook from './pages/Library/AddBook';
 import EditBook from './pages/Library/EditBook';
 import BlogNewPost from './pages/Blog/createBlog';
+import { appRoutes } from './constants/appRoutes';
 
 // ----------------------------------------------------------------------
 
@@ -36,18 +37,18 @@ export default function Router() {
     return <Loader isLoading={isLoader || isProfileLoading} />;
   }
 
-  const notFoundRoute = { path: '*', element: <Navigate to="/404" replace /> };
+  const notFoundRoute = { path: appRoutes.UNIVERSAL, element: <Navigate to={appRoutes.NOT_FOUND} replace /> };
 
   const publicRoutes = [
     {
       path: '/',
-      element: !user ? <LogoOnlyLayout /> : <Navigate to="/dashboard/app" />,
+      element: !user ? <LogoOnlyLayout /> : <Navigate to={appRoutes.DASHBOARD_APP} />,
       children: [
-        { path: '/', element: <Navigate to="/dashboard/app" /> },
+        { path: '/', element: <Navigate to={appRoutes.DASHBOARD_APP} /> },
         { path: 'login', element: <Login /> },
         { path: 'register', element: <Register /> },
         { path: '404', element: <NotFound /> },
-        { path: '*', element: <Navigate to="/404" /> },
+        { path: '*', element: <Navigate to={appRoutes.NOT_FOUND} /> },
       ],
     },
     notFoundRoute,
@@ -55,8 +56,8 @@ export default function Router() {
 
   const studentRoutes = [
     {
-      path: '/dashboard',
-      element: user ? <DashboardLayout /> : <Navigate to="/login" />,
+      path: appRoutes.DASHBOARD,
+      element: user ? <DashboardLayout /> : <Navigate to={appRoutes.LOGIN} />,
       children: [
         { path: 'app', element: <DashboardApp /> },
         { path: 'user', element: <User /> },
@@ -71,8 +72,8 @@ export default function Router() {
   ];
   const teacherRoutes = [
     {
-      path: '/dashboard',
-      element: user ? <DashboardLayout /> : <Navigate to="/login" />,
+      path: appRoutes.DASHBOARD,
+      element: user ? <DashboardLayout /> : <Navigate to={appRoutes.LOGIN} />,
       children: [
         { path: 'app', element: <DashboardApp /> },
         { path: 'user', element: <User /> },
@@ -88,8 +89,8 @@ export default function Router() {
   ];
   const librarianRoutes = [
     {
-      path: '/dashboard',
-      element: user ? <DashboardLayout /> : <Navigate to="/login" />,
+      path: appRoutes.DASHBOARD,
+      element: user ? <DashboardLayout /> : <Navigate to={appRoutes.LOGIN} />,
       children: [
         { path: 'app', element: <DashboardApp /> },
         // { path: 'user', element: <User /> },
