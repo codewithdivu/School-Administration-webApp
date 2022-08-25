@@ -21,6 +21,7 @@ import AddBook from './pages/Library/AddBook';
 import EditBook from './pages/Library/EditBook';
 import BlogNewPost from './pages/Blog/createBlog';
 import { appRoutes } from './constants/appRoutes';
+import EditBlogPost from './pages/Blog/editBlog';
 
 // ----------------------------------------------------------------------
 
@@ -80,6 +81,7 @@ export default function Router() {
         { path: 'library', element: <Library /> },
         { path: 'blog', element: <Blog /> },
         { path: 'blog/newBlog', element: <BlogNewPost /> },
+        { path: 'blog/editBlog/:blogId', element: <EditBlogPost /> },
         { path: 'account', element: <AccountGeneral /> },
         { path: 'profile', element: <Profile /> },
         notFoundRoute,

@@ -9,7 +9,7 @@ import { getBooksData } from '../../firebase/services';
 const EditBook = () => {
   const [bookData, setBookData] = useState(null);
   const params = useParams();
-  console.log('params', params);
+  // console.log('params', params);
 
   useEffect(() => {
     if (params?.bookId) {

@@ -79,6 +79,27 @@ export const getBooksData = async (bookId = null) =>
       });
   });
 
+// it will return all the data of blogs
+export const getBlogData = async (blogId = null) =>
+  new Promise((resolve) => {
+    const getBlogQuery = query(collection(db, BLOGS), where('id', '==', blogId));
+    getDocs(getBlogQuery)
+      .then((response) => {
+        const arr = [];
+        response.docs.forEach((doc) => {
+          arr.push({
+            ...doc.data(),
+            id: doc.id,
+          });
+        });
+        if (arr.length > 0) resolve(arr[0]);
+        else resolve(null);
+      })
+      .catch(() => {
+        resolve(null);
+      });
+  });
+
 // add methods
 
 export const addUser = async (userData) =>

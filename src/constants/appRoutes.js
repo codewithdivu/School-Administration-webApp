@@ -13,6 +13,7 @@ export const appRoutes = {
   DASHBOARD_PROFILE: '/dashboard/profile',
 
   DASHBOARD_BLOG_NEW_BLOG: '/dashboard/blog/newBlog',
+  DASHBOARD_BLOG_Edit_BLOG: '/dashboard/blog/EditBlog/:blogId',
 
   DASHBOARD_LIBRARY_ADD_BOOK: '/dashboard/library/addBook',
   DASHBOARD_LIBRARY_EDIT_BOOK: '/dashboard/library/editBook/:bookId',

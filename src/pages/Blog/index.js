@@ -11,6 +11,7 @@ import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import useListener from '../../hooks/useListner';
 import { BLOGS } from '../../firebase/collections';
 import SkeletonPostItem from './SkeletonPostItem';
+import { appRoutes } from '../../constants/appRoutes';
 
 // ----------------------------------------------------------------------
 
@@ -27,6 +28,11 @@ export default function Blog() {
 
   const navigate = useNavigate();
 
+  const handleEditBlog = (blogId) => {
+    console.log('blogId', blogId);
+    navigate(`/dashboard/blog/EditBlog/${blogId}`);
+  };
+
   return (
     <Page title="Dashboard: Blog">
       <Container>
@@ -41,7 +47,7 @@ export default function Blog() {
 
           <Button
             variant="contained"
-            to="/dashboard/blog/newBlog"
+            to={appRoutes.DASHBOARD_BLOG_NEW_BLOG}
             component={RouterLink}
             startIcon={<Iconify icon="eva:plus-fill" />}
           >
@@ -58,7 +64,7 @@ export default function Blog() {
           {(!listenerData?.length ? [...Array(12)] : listenerData).map((post, index) =>
             post ? (
               // <Grid key={post.id} item xs={12} sm={6} md={6}>
-              <BlogPostCard post={post} index={index} />
+              <BlogPostCard post={post} index={index} handleEditBlog={handleEditBlog} />
             ) : (
               // </Grid>
               <SkeletonPostItem key={index} />

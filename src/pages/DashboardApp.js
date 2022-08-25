@@ -57,7 +57,7 @@ export default function DashboardApp() {
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary
               title="Students"
-              total={listenerStudentsData?.length || 234}
+              total={listenerStudentsData?.length || 0}
               icon={'ant-design:user-outlined'}
             />
           </Grid>
@@ -65,7 +65,7 @@ export default function DashboardApp() {
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary
               title="Books"
-              total={listenerData?.length || 353}
+              total={listenerData?.length || 0}
               color="info"
               icon={'ant-design:book-outlined'}
             />

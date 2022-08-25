@@ -4,6 +4,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { alpha, styled } from '@mui/material/styles';
 import { Box, Link, Card, Grid, Avatar, Typography, CardContent } from '@mui/material';
 // utils
+import { LoadingButton } from '@mui/lab';
 import { fDate } from '../../../utils/formatTime';
 import { fShortenNumber } from '../../../utils/formatNumber';
 //
@@ -57,10 +58,8 @@ BlogPostCard.propTypes = {
   index: PropTypes.number,
 };
 
-export default function BlogPostCard({ post, index }) {
-  const { cover, title, view, comment, share, author, createdAt, imageUrl } = post;
-  const latestPostLarge = index === 0;
-  const latestPost = index === 1 || index === 2;
+export default function BlogPostCard({ post, index, handleEditBlog }) {
+  const { title, view, comment, share, author, createdAt, imageUrl, id } = post;
 
   const POST_INFO = [
     { number: comment, icon: 'eva:message-circle-fill' },
@@ -151,6 +150,9 @@ export default function BlogPostCard({ post, index }) {
           >
             {title}
           </TitleStyle>
+          <LoadingButton variant="contained" size="small" onClick={() => handleEditBlog(id)}>
+            Edit
+          </LoadingButton>
 
           <InfoStyle>
             {POST_INFO.map((info, index) => (

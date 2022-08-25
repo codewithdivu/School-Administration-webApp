@@ -27,7 +27,7 @@ export default function BlogNewPost() {
           ]}
         />
 
-        <BlogNewPostForm />
+        <BlogNewPostForm isEdit={false} currentBlog="" />
       </Container>
     </Page>
   );

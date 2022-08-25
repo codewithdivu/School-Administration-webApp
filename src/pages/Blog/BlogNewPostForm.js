@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect, useMemo } from 'react';
 // import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 // form
@@ -11,12 +11,13 @@ import { styled } from '@mui/material/styles';
 import { Grid, Card, Chip, Stack, Button, TextField, Typography, Autocomplete } from '@mui/material';
 // routes
 // components
-import { RHFSwitch,  FormProvider, RHFTextField, RHFUploadSingleFile } from '../../components/hook-form';
+import { RHFSwitch, FormProvider, RHFTextField, RHFUploadSingleFile } from '../../components/hook-form';
 //
 import BlogNewPostPreview from './BlogNewPostPreview';
 import { IMAGE_BUCKET, uploadFile } from '../../firebase/storage';
-import { addBlog } from '../../firebase/services';
+import { addBlog, updateItem } from '../../firebase/services';
 import { appRoutes } from '../../constants/appRoutes';
+import { BLOGS } from '../../firebase/collections';
 // ----------------------------------------------------------------------
 
 const TAGS_OPTION = [
@@ -43,7 +44,7 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function BlogNewPostForm() {
+export default function BlogNewPostForm({ isEdit, currentBlog }) {
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
@@ -66,18 +67,21 @@ export default function BlogNewPostForm() {
     // cover: Yup.mixed().required('Cover is required'),
   });
 
-  const defaultValues = {
-    title: '',
-    description: '',
-    content: '',
-    cover: null,
-    tags: ['Logan'],
-    publish: true,
-    comments: true,
-    metaTitle: '',
-    metaDescription: '',
-    metaKeywords: ['Logan'],
-  };
+  const defaultValues = useMemo(
+    () => ({
+      title: currentBlog?.title || '',
+      description: currentBlog?.description || '',
+      content: currentBlog?.content || '',
+      cover: currentBlog?.cover || null,
+      tags: currentBlog?.tags || ['Logan'],
+      publish: true,
+      comments: true,
+      metaTitle: currentBlog?.metaTitle || '',
+      metaDescription: currentBlog?.metaDescription || '',
+      metaKeywords: currentBlog?.metaKeywords || ['Logan'],
+    }),
+    [currentBlog]
+  );
 
   const methods = useForm({
     resolver: yupResolver(NewBlogSchema),
@@ -85,7 +89,7 @@ export default function BlogNewPostForm() {
   });
 
   const {
-    // reset,
+    reset,
     watch,
     control,
     setValue,
@@ -94,6 +98,15 @@ export default function BlogNewPostForm() {
   } = methods;
 
   const values = watch();
+
+  useEffect(() => {
+    if (isEdit && currentBlog) {
+      reset(defaultValues);
+    }
+    if (!isEdit) {
+      reset(defaultValues);
+    }
+  }, [isEdit, currentBlog]);
 
   const onSubmit = async ({ cover, ...blogData }) => {
     // console.log('dataOfBlog', blogData);
@@ -104,11 +117,15 @@ export default function BlogNewPostForm() {
       const imageUrl = await uploadFile(cover, `${IMAGE_BUCKET}/${uniqueFileName}`);
       // console.log('imageURL', imageUrl);
 
-      const dataAddBlog = await addBlog({ ...blogData, imageUrl, uniqueFileName });
-
-      if (dataAddBlog) {
-        navigate(appRoutes.DASHBOARD_BLOG);
+      if (isEdit) {
+        await updateItem(BLOGS, currentBlog.id, blogData);
+      } else {
+        const dataAddBlog = await addBlog({ ...blogData, imageUrl, uniqueFileName });
       }
+
+      // if (dataAddBlog) {
+      navigate(appRoutes.DASHBOARD_BLOG);
+      // }
     } catch (error) {
       console.error(error);
     }
@@ -223,7 +240,7 @@ export default function BlogNewPostForm() {
                 Preview
               </Button>
               <LoadingButton fullWidth type="submit" variant="contained" size="large" loading={isSubmitting}>
-                Post
+                {!isEdit ? 'Post' : 'Update Post'}
               </LoadingButton>
             </Stack>
           </Grid>
