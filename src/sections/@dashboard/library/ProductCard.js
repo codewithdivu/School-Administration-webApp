@@ -36,7 +36,7 @@ export default function ShopProductCard({ product, handleViewBook, handleDeleteB
       Delete
     </LoadingButton>
   );
-  const renderView = userProfile?.role === 29 && (
+  const renderView = (
     <LoadingButton variant="contained" size="small" onClick={() => handleViewBook(product)}>
       View
     </LoadingButton>
@@ -79,14 +79,14 @@ export default function ShopProductCard({ product, handleViewBook, handleDeleteB
           {/* <ColorPreview colors={code} /> */}
           <Typography variant="subtitle1">
             <Typography
-              component="span"
-              variant="body1"
-              sx={{
-                color: 'text.disabled',
-                textDecoration: 'line-through',
-              }}
+            // component="span"
+            // variant="body1"
+            // sx={{
+            //   color: 'text.disabled',
+            //   textDecoration: 'line-through',
+            // }}
             >
-              {price && fCurrency(price)}
+              {/* {price && fCurrency(price)} */}
             </Typography>
             &nbsp;
             {fCurrency(price)}

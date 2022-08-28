@@ -58,8 +58,9 @@ BlogPostCard.propTypes = {
   index: PropTypes.number,
 };
 
-export default function BlogPostCard({ post, index, handleEditBlog }) {
+export default function BlogPostCard({ post, index, handleEditBlog, handleDeleteBlog }) {
   const { title, view, comment, share, author, createdAt, imageUrl, id } = post;
+  const userProfile = JSON.parse(localStorage.getItem('userProfileData'));
 
   const POST_INFO = [
     { number: comment, icon: 'eva:message-circle-fill' },
@@ -150,10 +151,16 @@ export default function BlogPostCard({ post, index, handleEditBlog }) {
           >
             {title}
           </TitleStyle>
-          <LoadingButton variant="contained" size="small" onClick={() => handleEditBlog(id)}>
-            Edit
-          </LoadingButton>
-
+          {userProfile.role === 45 && (
+            <>
+              <LoadingButton variant="contained" size="small" onClick={() => handleEditBlog(id)}>
+                Edit
+              </LoadingButton>
+              <LoadingButton variant="contained" size="small" onClick={() => handleDeleteBlog(post)}>
+                Delete
+              </LoadingButton>
+            </>
+          )}
           <InfoStyle>
             {POST_INFO.map((info, index) => (
               <Box

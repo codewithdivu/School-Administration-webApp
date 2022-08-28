@@ -8,10 +8,11 @@ import { useNavigate } from 'react-router-dom';
 import { SectionLoader } from '../../../components/sectionLoader';
 import ShopProductCard from './ProductCard';
 import PdfViewer from '../../../components/pdf-viewer';
-import { deleteBook } from '../../../firebase/services';
+import { deleteDocument } from '../../../firebase/services';
 import { BOOKS } from '../../../firebase/collections';
 import { storage } from '../../../firebase/config';
 import { deleteFile, DOCUMENT_BUCKET, IMAGE_BUCKET } from '../../../firebase/storage';
+import SkeletonPostItem from '../../../pages/Blog/SkeletonPostItem';
 
 // ----------------------------------------------------------------------
 
@@ -58,7 +59,7 @@ export default function ProductList({ products, isLoading, ...other }) {
     // eslint-disable-next-line no-useless-return
     if (!id) return;
     try {
-      const isBookDeleted = await deleteBook(BOOKS, id);
+      const isBookDeleted = await deleteDocument(BOOKS, id);
       console.log('isBookDeleted', isBookDeleted);
       if (isBookDeleted) {
         await deleteFile(`${IMAGE_BUCKET}/${uniqueFileName}`);
@@ -76,22 +77,22 @@ export default function ProductList({ products, isLoading, ...other }) {
 
   return (
     <Grid container spacing={3} {...other}>
-      {isLoading ? (
-        <SectionLoader />
-      ) : (
-        products &&
+      {products &&
         products.length > 0 &&
-        products.map((product) => (
-          <Grid key={product.id} item xs={12} sm={6} md={3}>
-            <ShopProductCard
-              handleViewBook={handleViewBook}
-              handleDeleteBook={handleDeleteBook}
-              handleEditBook={handleEditBook}
-              product={product}
-            />
-          </Grid>
-        ))
-      )}
+        products.map((product, index) =>
+          product ? (
+            <Grid key={product.id} item xs={12} sm={6} md={3}>
+              <ShopProductCard
+                handleViewBook={handleViewBook}
+                handleDeleteBook={handleDeleteBook}
+                handleEditBook={handleEditBook}
+                product={product}
+              />
+            </Grid>
+          ) : (
+            <SkeletonPostItem key={index} />
+          )
+        )}
       {isBookViewOpen && (
         <PdfViewer file={bookFile} filename="divu" onClose={handleCloseBookView} open={isBookViewOpen} />
       )}

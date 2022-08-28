@@ -12,6 +12,8 @@ import useListener from '../../hooks/useListner';
 import { BLOGS } from '../../firebase/collections';
 import SkeletonPostItem from './SkeletonPostItem';
 import { appRoutes } from '../../constants/appRoutes';
+import { deleteDocument } from '../../firebase/services';
+import { deleteFile, IMAGE_BUCKET } from '../../firebase/storage';
 
 // ----------------------------------------------------------------------
 
@@ -25,12 +27,25 @@ const SORT_OPTIONS = [
 
 export default function Blog() {
   const { listenerData, isLoading } = useListener(BLOGS);
+  const userProfile = JSON.parse(localStorage.getItem('userProfileData'));
 
   const navigate = useNavigate();
 
   const handleEditBlog = (blogId) => {
     console.log('blogId', blogId);
     navigate(`/dashboard/blog/EditBlog/${blogId}`);
+  };
+
+  const handleDeleteBlog = async ({ id, uniqueFileName }) => {
+    console.log('deleted...', id);
+    try {
+      const isBlogDeleted = await deleteDocument(BLOGS, id);
+      if (isBlogDeleted) {
+        await deleteFile(`${IMAGE_BUCKET}/${uniqueFileName}`);
+      }
+    } catch (error) {
+      console.log('error', error);
+    }
   };
 
   return (
@@ -44,15 +59,16 @@ export default function Blog() {
               { name: 'Blogs', href: 'dashboard/blog' },
             ]}
           />
-
-          <Button
-            variant="contained"
-            to={appRoutes.DASHBOARD_BLOG_NEW_BLOG}
-            component={RouterLink}
-            startIcon={<Iconify icon="eva:plus-fill" />}
-          >
-            New Post
-          </Button>
+          {userProfile?.role === 45 && (
+            <Button
+              variant="contained"
+              to={appRoutes.DASHBOARD_BLOG_NEW_BLOG}
+              component={RouterLink}
+              startIcon={<Iconify icon="eva:plus-fill" />}
+            >
+              New Post
+            </Button>
+          )}
         </Stack>
 
         <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
@@ -64,7 +80,12 @@ export default function Blog() {
           {(!listenerData?.length ? [...Array(12)] : listenerData).map((post, index) =>
             post ? (
               // <Grid key={post.id} item xs={12} sm={6} md={6}>
-              <BlogPostCard post={post} index={index} handleEditBlog={handleEditBlog} />
+              <BlogPostCard
+                post={post}
+                index={index}
+                handleEditBlog={handleEditBlog}
+                handleDeleteBlog={handleDeleteBlog}
+              />
             ) : (
               // </Grid>
               <SkeletonPostItem key={index} />

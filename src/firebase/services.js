@@ -170,7 +170,7 @@ export const updateItem = async (collectionName, documentId, updatedData) =>
 
 // delete methods
 
-export const deleteBook = async (collectionName, documentId) =>
+export const deleteDocument = async (collectionName, documentId) =>
   new Promise((resolve) => {
     deleteDoc(doc(db, collectionName, documentId))
       .then(() => resolve(true))
