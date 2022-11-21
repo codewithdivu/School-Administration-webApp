@@ -5,7 +5,7 @@ import { getBlob, ref } from 'firebase/storage';
 import { Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 // import axios from 'axios';
-import { SectionLoader } from '../../../components/sectionLoader';
+// import { SectionLoader } from '../../../components/sectionLoader';
 import ShopProductCard from './ProductCard';
 import PdfViewer from '../../../components/pdf-viewer';
 import { deleteDocument } from '../../../firebase/services';

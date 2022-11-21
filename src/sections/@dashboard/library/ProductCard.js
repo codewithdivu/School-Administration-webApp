@@ -26,6 +26,7 @@ ShopProductCard.propTypes = {
   product: PropTypes.object,
   handleViewBook: PropTypes.func,
   handleDeleteBook: PropTypes.func,
+  handleEditBook: PropTypes.func,
 };
 
 export default function ShopProductCard({ product, handleViewBook, handleDeleteBook, handleEditBook }) {

@@ -6,7 +6,7 @@ import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
 import { BlogPostCard, BlogPostsSort, BlogPostsSearch } from '../../sections/@dashboard/blog';
 // mock
-import POSTS from '../../_mock/blog';
+// import POSTS from '../../_mock/blog';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import useListener from '../../hooks/useListner';
 import { BLOGS } from '../../firebase/collections';
@@ -64,7 +64,7 @@ export default function Blog() {
               variant="contained"
               to={appRoutes.DASHBOARD_BLOG_NEW_BLOG}
               component={RouterLink}
-              startIcon={<Iconify icon="eva:plus-fill" />}
+              startIcon={<Iconify color="white" icon="eva:plus-fill" />}
             >
               New Post
             </Button>
