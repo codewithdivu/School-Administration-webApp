@@ -45,7 +45,7 @@ export default function Library() {
   // console.log('allBooksData', listenerData);
 
   return (
-    <Page title="Dashboard: Library">
+    <Page title="Library">
       <Container>
         <HeaderBreadcrumbs
           heading="Library"

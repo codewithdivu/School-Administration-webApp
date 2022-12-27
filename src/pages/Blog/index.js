@@ -49,7 +49,7 @@ export default function Blog() {
   };
 
   return (
-    <Page title="Dashboard: Blog">
+    <Page title="Blog">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <HeaderBreadcrumbs

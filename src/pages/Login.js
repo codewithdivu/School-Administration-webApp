@@ -1,4 +1,9 @@
-import { sendEmailVerification, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import {
+  sendEmailVerification,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  FacebookAuthProvider,
+} from 'firebase/auth';
 
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
@@ -13,7 +18,7 @@ import Logo from '../components/Logo';
 import { LoginForm } from '../sections/auth/login';
 import AuthSocial from '../sections/auth/AuthSocial';
 
-import { auth, provider } from '../firebase/config';
+import { auth, provider, facebookProvider } from '../firebase/config';
 import { addUser, getUserData } from '../firebase/services';
 import config from '../config';
 import { appRoutes } from '../constants/appRoutes';
@@ -84,6 +89,36 @@ export default function Login() {
       .catch(() => {});
   };
 
+  const handleFacebookSignIn = async () => {
+    await signInWithPopup(auth, facebookProvider)
+      .then(async (result) => {
+        console.log('facebook', result);
+        const { user } = result;
+        if (result) {
+          console.log('facebook', result);
+          const response = await getUserData(user.email);
+
+          if (!response) {
+            await addUser({ ...user?.providerData[0] });
+          }
+        }
+        const credential = FacebookAuthProvider.credentialFromResult(result);
+        const accessToken = credential.accessToken;
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        console.log('not login with facebook');
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = FacebookAuthProvider.credentialFromError(error);
+
+        // ...
+      });
+  };
+
   const handleEmailSignIn = async (loginData) => {
     const { email, password } = loginData;
     signInWithEmailAndPassword(auth, email, password)
@@ -106,11 +141,14 @@ export default function Login() {
   };
 
   const handleSignIn = (value, loginData = '') => {
-    // console.log('value', value)
+    console.log('value', value);
     // e.preventDefault();
     switch (value) {
       case 'google':
         handleGoogleSignIn();
+        break;
+      case 'facebook':
+        handleFacebookSignIn();
         break;
       case 'email':
         handleEmailSignIn(loginData);
